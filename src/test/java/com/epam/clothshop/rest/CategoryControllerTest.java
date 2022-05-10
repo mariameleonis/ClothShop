@@ -2,6 +2,7 @@ package com.epam.clothshop.rest;
 
 import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.model.Category;
+import com.epam.clothshop.model.Product;
 import com.epam.clothshop.service.CategoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +42,8 @@ public class CategoryControllerTest {
 
     @MockBean
     private CategoryService categoryService;
+
+    @MockBean ProductService productService;
 
     @Captor
     private ArgumentCaptor<CategoryDto> argumentCaptor;
@@ -110,6 +114,50 @@ public class CategoryControllerTest {
 
         mockMvc.perform(get("/api/categories/42"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetProductsByCategory_WhenEverythingIsOk() throws Exception {
+
+        when(productService.listByCategory(1L)).thenReturn(List.of(createProduct(1L, "Little Black Dress", 120.50, 15, 1L, 1L),
+                createProduct(2L, "Rose Cocktail Dress"), 110.70, 3, 1L, 2L),
+                createProduct(3L, "Night Blue Dress", 98.40, 7, 1L, 3L)));
+
+        mockMvc.perform(get("/api/categories/1/products"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].name", is("Little Black Dress")))
+                .andExpect(jsonPath("$[0].price", is(120.50)))
+                .andExpect(jsonPath("$[0].unitsInStock", is(15)))
+                .andExpect(jsonPath("$[0].categoryId", is(1)))
+                .andExpect(jsonPath("$[0].vendorId", is(1)))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].name", is("Rose Cocktail Dress")))
+                .andExpect(jsonPath("$[1].price", is(110.70)))
+                .andExpect(jsonPath("$[1].unitsInStock", is(3)))
+                .andExpect(jsonPath("$[1].categoryId", is(1)))
+                .andExpect(jsonPath("$[1].vendorId", is(2)))
+                .andExpect(jsonPath("$[2].id", is(3)))
+                .andExpect(jsonPath("$[2].name", is("Night Blue Dress")))
+                .andExpect(jsonPath("$[2].price", is(98.40)))
+                .andExpect(jsonPath("$[2].unitsInStock", is(7)))
+                .andExpect(jsonPath("$[2].categoryId", is(1)))
+                .andExpect(jsonPath("$[2].vendorId", is(3)));
+    }
+
+    private Product createProduct(long id, String name, BigDecimal price, int quantity, long categoryId, long vendorId) {
+
+        Product product = new Product();
+        product.setId(id);
+        product.setName(name);
+        product.setPrice(price);
+        product.setUnitsInStock(quantity);
+        product.setCategoryId(categoryId);
+        product.setVendorId(vendorId);
+
+        return product;
     }
 
     private Category createCategory(long id, String name) {

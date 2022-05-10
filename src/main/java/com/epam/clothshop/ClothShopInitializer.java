@@ -95,8 +95,6 @@ public class ClothShopInitializer implements CommandLineRunner {
 
             orderRepository.save(order);
 
-            log.info("Order status: " + order.getStatus());
-
             OrderItem orderItem = new OrderItem();
 
             orderItem.setOrderId(order.getOrderId());

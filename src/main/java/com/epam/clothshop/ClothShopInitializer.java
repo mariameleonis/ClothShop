@@ -62,7 +62,7 @@ public class ClothShopInitializer implements CommandLineRunner {
             user.setUsername(faker.name().username());
             user.setEmail(faker.internet().emailAddress());
             user.setPassword(faker.internet().password());
-            user.setPhone(String.valueOf(faker.phoneNumber().phoneNumber()));
+            user.setPhone(String.valueOf(faker.phoneNumber().cellPhone()));
 
             userRepository.save(user);
         }
@@ -94,8 +94,6 @@ public class ClothShopInitializer implements CommandLineRunner {
             order.setOrderItems(orderItems);
 
             orderRepository.save(order);
-
-            //order = orderRepository.getById(order.getOrderId());
 
             log.info("Order status: " + order.getStatus());
 

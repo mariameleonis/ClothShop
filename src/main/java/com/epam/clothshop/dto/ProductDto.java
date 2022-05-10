@@ -17,7 +17,7 @@ public class ProductDto extends Dto {
 
     @NotEmpty(groups = {New.class, Update.class})
     @Null(groups = {UpdateImage.class})
-    @Size(min = 4, max = 25, groups = {New.class, Update.class})
+    @Size(min = 4, max = 100, groups = {New.class, Update.class})
     private String name;
 
     @Null(groups = {UpdateImage.class})

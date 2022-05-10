@@ -24,7 +24,7 @@ public class CategoryDto {
     private Long categoryId;
 
     @NotEmpty(groups = {New.class, Update.class})
-    @Size(min = 4, max = 25, groups = {New.class, Update.class})
+    @Size(min = 4, max = 30, groups = {New.class, Update.class})
     private String categoryName;
 
 }

@@ -2,6 +2,7 @@ package com.epam.clothshop.rest;
 
 import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.service.CategoryService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -53,5 +54,16 @@ public class CategoryControllerTest {
                 .andExpect(header().string("Location", "http://localhost/api/categories/1"));
 
         assertThat(argumentCaptor.getValue().getCategoryName(), is("Dresses"));
+    }
+
+    @Test
+    public void testCreateCategory_WhenInvalidCategorySupplied() throws Exception {
+
+        CategoryDto categoryDto = new CategoryDto();
+
+        mockMvc.perform(post("/api/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(categoryDto)))
+                .andExpect(status().isBadRequest());
     }
 }

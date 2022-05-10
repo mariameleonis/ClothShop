@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @Data
 public class CategoryDto {
 
-    interface New {
+    public interface New {
     }
 
     interface Exist {

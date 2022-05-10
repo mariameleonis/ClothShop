@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -93,13 +94,22 @@ public class CategoryControllerTest {
     @Test
     public void testGetCategoryById_WhenEverythingIsOk() throws Exception {
 
-        when(categoryService.getCategoryById(1L)).thenReturn(createCategory(1L, "Dresses"));
+        when(categoryService.getCategoryById(1L)).thenReturn(Optional.of(createCategory(1L, "Dresses")));
 
         mockMvc.perform(get("/api/categories/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.categoryName", is("Dresses")))
                 .andExpect(jsonPath("$.categoryId", is(1)));
+    }
+
+    @Test
+    public void testGetCategoryById_WhenNotFound() throws Exception {
+
+        when(categoryService.getCategoryById(42L)).thenThrow(new NotFound404Exception("Category with id: '42' not found"));
+
+        mockMvc.perform(get("/api/categories/42"))
+                .andExpect(status().isNotFound());
     }
 
     private Category createCategory(long id, String name) {

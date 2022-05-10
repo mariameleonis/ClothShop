@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -38,5 +39,16 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<List<Category>> getCategories() {
         return ResponseEntity.ok(categoryService.getCategories());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getCategoryById(@PathVariable("id") Long id) {
+
+       Optional<Category> category = categoryService.getCategoryById(id);
+
+       if (category.isEmpty()) {
+           throw new NotFound404Exception(String.format("Category with id: '%s' not found"));
+       }
+       return ResponseEntity.ok(category.get());
     }
 }

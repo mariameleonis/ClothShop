@@ -3,7 +3,6 @@ package com.epam.clothshop.service;
 import com.epam.clothshop.dao.CategoryRepository;
 import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.model.Category;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,12 +10,20 @@ import java.util.Optional;
 
 @Service
 public class CategoryService {
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    public CategoryService(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     public Long createCategory(CategoryDto categoryDto) {
-        return null;
+
+        Category category = new Category();
+        category.setCategoryName(categoryDto.getCategoryName());
+
+        category = categoryRepository.save(category);
+
+        return category.getCategoryId();
     }
 
     public List<Category> getCategories() {

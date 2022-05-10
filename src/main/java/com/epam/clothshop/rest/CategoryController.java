@@ -2,7 +2,9 @@ package com.epam.clothshop.rest;
 
 import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.model.Category;
+import com.epam.clothshop.model.Product;
 import com.epam.clothshop.service.CategoryService;
+import com.epam.clothshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ProductService productService;
 
     @PostMapping
     public ResponseEntity<Void> createCategory(@Validated(CategoryDto.New.class) @RequestBody CategoryDto categoryDto,
@@ -50,5 +55,10 @@ public class CategoryController {
            throw new NotFound404Exception(String.format("Category with id: '%s' not found"));
        }
        return ResponseEntity.ok(category.get());
+    }
+
+    @GetMapping("/{id}/products")
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(productService.listByCategory(id));
     }
 }

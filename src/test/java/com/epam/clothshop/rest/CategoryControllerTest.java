@@ -4,6 +4,7 @@ import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.model.Category;
 import com.epam.clothshop.model.Product;
 import com.epam.clothshop.service.CategoryService;
+import com.epam.clothshop.service.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,8 @@ public class CategoryControllerTest {
     @MockBean
     private CategoryService categoryService;
 
-    @MockBean ProductService productService;
+    @MockBean
+    private ProductService productService;
 
     @Captor
     private ArgumentCaptor<CategoryDto> argumentCaptor;
@@ -119,9 +121,9 @@ public class CategoryControllerTest {
     @Test
     public void testGetProductsByCategory_WhenEverythingIsOk() throws Exception {
 
-        when(productService.listByCategory(1L)).thenReturn(List.of(createProduct(1L, "Little Black Dress", 120.50, 15, 1L, 1L),
-                createProduct(2L, "Rose Cocktail Dress"), 110.70, 3, 1L, 2L),
-                createProduct(3L, "Night Blue Dress", 98.40, 7, 1L, 3L)));
+        when(productService.listByCategory(1L)).thenReturn(List.of(createProduct(1L, "Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, 1L),
+                createProduct(2L, "Rose Cocktail Dress", BigDecimal.valueOf(110.70), 3, 1L, 2L),
+                createProduct(3L, "Night Blue Dress", BigDecimal.valueOf(98.40), 7, 1L, 3L)));
 
         mockMvc.perform(get("/api/categories/1/products"))
                 .andExpect(status().isOk())

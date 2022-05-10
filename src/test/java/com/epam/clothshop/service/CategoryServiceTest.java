@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.lang.model.util.Types;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -64,6 +65,17 @@ public class CategoryServiceTest {
         assertThat(categories.size(), is(3));
         assertThat(categories.get(0).getCategoryId(), is(1L));
         assertThat(categories.get(0).getCategoryName(), is("Dresses"));
+    }
+
+    @Test
+    public void testGetCategoryById_WhenEverythingIsOk() {
+
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(createCategory(1L, "Dresses")));
+
+        Optional<Category> resultCategory = categoryService.getCategoryById(1L);
+
+        assertThat(resultCategory.get().getCategoryId(), is(1L));
+        assertThat(resultCategory.get().getCategoryName(), is("Dresses"));
     }
 
     private Category createCategory(long id, String name) {

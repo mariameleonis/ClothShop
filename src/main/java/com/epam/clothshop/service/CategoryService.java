@@ -15,4 +15,8 @@ public class CategoryService {
     public List<Category> getCategories() {
         return null;
     }
+
+    public Category getCategoryById(long id) {
+        return null;
+    }
 }

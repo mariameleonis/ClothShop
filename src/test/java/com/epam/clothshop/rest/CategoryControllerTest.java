@@ -90,6 +90,18 @@ public class CategoryControllerTest {
                 .andExpect(jsonPath("$[2].categoryId", is(3)));
     }
 
+    @Test
+    public void testGetCategoryById_WhenEverythingIsOk() throws Exception {
+
+        when(categoryService.getCategoryById(1L)).thenReturn(createCategory(1L, "Dresses"));
+
+        mockMvc.perform(get("/api/categories/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.categoryName", is("Dresses")))
+                .andExpect(jsonPath("$.categoryId", is(1)));
+    }
+
     private Category createCategory(long id, String name) {
 
         Category category = new Category();

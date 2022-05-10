@@ -83,11 +83,11 @@ public class CategoryControllerTest {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].categoryName", is("Dresses")))
-                .andExpect(jsonPath("$[0].categoryId", is(1L)))
+                .andExpect(jsonPath("$[0].categoryId", is(1)))
                 .andExpect(jsonPath("$[1].categoryName", is("Skirts")))
-                .andExpect(jsonPath("$[1].categoryId", is(2L)))
+                .andExpect(jsonPath("$[1].categoryId", is(2)))
                 .andExpect(jsonPath("$[2].categoryName", is("Tops")))
-                .andExpect(jsonPath("$[2].categoryId", is(3L)));
+                .andExpect(jsonPath("$[2].categoryId", is(3)));
     }
 
     private Category createCategory(long id, String name) {

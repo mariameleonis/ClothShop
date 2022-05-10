@@ -31,6 +31,6 @@ public class CategoryService {
     }
 
     public Optional<Category> getCategoryById(long id) {
-        return null;
+        return categoryRepository.findById(id);
     }
 }

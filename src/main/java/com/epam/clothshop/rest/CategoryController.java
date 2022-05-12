@@ -57,6 +57,13 @@ public class CategoryController {
 
     @GetMapping("/{id}/products")
     public ResponseEntity<Set<Product>> getProductsByCategory(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(categoryService.getCategoryById(id).get().getProducts());
+
+        Optional<Category> category = categoryService.getCategoryById(id);
+
+        if (category.isEmpty()) {
+            throw new NotFound404Exception(String.format("Category with id: '%s' not found"));
+        }
+
+        return ResponseEntity.ok(category.get().getProducts());
     }
 }

@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -121,9 +122,12 @@ public class CategoryControllerTest {
     @Test
     public void testGetProductsByCategory_WhenEverythingIsOk() throws Exception {
 
-        when(productService.listByCategory(1L)).thenReturn(List.of(createProduct(1L, "Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, 1L),
+        Category category = createCategory(1L, "Dresses");
+        category.setProducts(Set.of(createProduct(1L, "Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, 1L),
                 createProduct(2L, "Rose Cocktail Dress", BigDecimal.valueOf(110.70), 3, 1L, 2L),
                 createProduct(3L, "Night Blue Dress", BigDecimal.valueOf(98.40), 7, 1L, 3L)));
+
+        when(categoryService.getCategoryById(1L)).thenReturn(Optional.of(category));
 
         mockMvc.perform(get("/api/categories/1/products"))
                 .andExpect(status().isOk())

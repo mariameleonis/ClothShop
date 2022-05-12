@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -24,9 +25,6 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
-
-    @Autowired
-    private ProductService productService;
 
     @PostMapping
     public ResponseEntity<Void> createCategory(@Validated(CategoryDto.New.class) @RequestBody CategoryDto categoryDto,
@@ -58,7 +56,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/products")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(productService.listByCategory(id));
+    public ResponseEntity<Set<Product>> getProductsByCategory(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id).get().getProducts());
     }
 }

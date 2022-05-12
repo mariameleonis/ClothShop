@@ -2,12 +2,12 @@ package com.epam.clothshop.dto;
 
 public class Dto {
 
-    interface New {
+    public interface New {
     }
 
-    interface Exists {
+    public interface Exists {
     }
 
-    interface Update extends Exists {
+    public interface Update extends Exists {
     }
 }

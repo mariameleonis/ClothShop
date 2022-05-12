@@ -5,6 +5,7 @@ import lombok.ToString;
 import lombok.experimental.Tolerate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ public class Vendor {
     private String vendorName;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "vendorId")
-    private Set<Product> products;
+    private List<Product> products;
 
     @Tolerate
     public Vendor(Long vendorId, String vendorName) {
@@ -29,7 +30,7 @@ public class Vendor {
     }
 
     @Tolerate
-    public Vendor(Long vendorId, String vendorName, Set<Product> products) {
+    public Vendor(Long vendorId, String vendorName, List<Product> products) {
         this.vendorId = vendorId;
         this.vendorName = vendorName;
         this.products = products;

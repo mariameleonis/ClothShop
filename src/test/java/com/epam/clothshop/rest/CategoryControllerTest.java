@@ -45,9 +45,6 @@ public class CategoryControllerTest {
     @MockBean
     private CategoryService categoryService;
 
-    @MockBean
-    private ProductService productService;
-
     @Captor
     private ArgumentCaptor<CategoryDto> argumentCaptor;
 

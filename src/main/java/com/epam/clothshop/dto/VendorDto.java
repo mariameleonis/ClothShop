@@ -8,16 +8,7 @@ import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 @Data
-public class VendorDto {
-
-    interface New {
-    }
-
-    interface Exist {
-    }
-
-    interface Update extends Exist {
-    }
+public class VendorDto extends Dto {
 
     @Null(groups = {New.class})
     @NotNull(groups = {Update.class})

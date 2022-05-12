@@ -1,15 +1,10 @@
 package com.epam.clothshop.rest;
 
-import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.dto.ProductDto;
 import com.epam.clothshop.dto.VendorDto;
-import com.epam.clothshop.model.Category;
 import com.epam.clothshop.model.Product;
 import com.epam.clothshop.model.Vendor;
-import com.epam.clothshop.service.CategoryService;
-import com.epam.clothshop.service.ProductService;
 import com.epam.clothshop.service.VendorService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -21,12 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -34,7 +27,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -90,16 +82,16 @@ public class VendorControllerTest {
         when(vendorService.getVendors()).thenReturn(List.of(new Vendor(1L, "H&M"),
                 new Vendor(2L, "Pull&Bear"), new Vendor(3L, "Tops")));
 
-        mockMvc.perform(get("/api/categories"))
+        mockMvc.perform(get("/api/vendors"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].categoryName", is("Dresses")))
-                .andExpect(jsonPath("$[0].categoryId", is(1)))
-                .andExpect(jsonPath("$[1].categoryName", is("Skirts")))
-                .andExpect(jsonPath("$[1].categoryId", is(2)))
-                .andExpect(jsonPath("$[2].categoryName", is("Tops")))
-                .andExpect(jsonPath("$[2].categoryId", is(3)));
+                .andExpect(jsonPath("$[0].vendorName", is("H&M")))
+                .andExpect(jsonPath("$[0].vendorId", is(1)))
+                .andExpect(jsonPath("$[1].vendorName", is("Pull&Bear")))
+                .andExpect(jsonPath("$[1].vendorId", is(2)))
+                .andExpect(jsonPath("$[2].vendorName", is("Tops")))
+                .andExpect(jsonPath("$[2].vendorId", is(3)));
     }
 
     @Test
@@ -126,7 +118,7 @@ public class VendorControllerTest {
     @Test
     public void testGetProductsByVendor_WhenEverythingIsOk() throws Exception {
 
-        Vendor vendor = new Vendor(1L, "H&M", Set.of(new Product(1L, "Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, 1L),
+        Vendor vendor = new Vendor(1L, "H&M", List.of(new Product(1L, "Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, 1L),
                 new Product(2L, "Rose Cocktail Dress", BigDecimal.valueOf(110.70), 3, 1L, 1L),
                 new Product(3L, "Night Blue Dress", BigDecimal.valueOf(98.40), 7, 1L, 1L)));
 
@@ -160,8 +152,10 @@ public class VendorControllerTest {
     public void testUpdateVendor_WhenEverythingIsOk() throws Exception {
 
         VendorDto vendorDto = new VendorDto();
+        vendorDto.setVendorId(1L);
         vendorDto.setVendorName("Zara");
 
+        when(vendorService.getVendorById(1L)).thenReturn(Optional.of(new Vendor(1L, "Zara")));
         when(vendorService.updateVendor(eq(1L), argumentCaptor.capture())).thenReturn(new Vendor(1L, "Zara"));
 
         mockMvc.perform(put("/api/vendors/1")
@@ -180,6 +174,7 @@ public class VendorControllerTest {
     public void testUpdateVendorWithUnknownId_WhenReturn404() throws Exception {
 
         VendorDto vendorDto = new VendorDto();
+        vendorDto.setVendorId(42L);
         vendorDto.setVendorName("Zara");
 
         when(vendorService.updateVendor(eq(42L), argumentCaptor.capture())).thenThrow(new NotFound404Exception("Vendor with id: '42' not found"));
@@ -188,6 +183,34 @@ public class VendorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(vendorDto)))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testDeleteVendor_WhenEverythingIsOk() throws Exception {
+
+        when(vendorService.getVendorById(1L)).thenReturn(Optional.of(new Vendor(1L, "Zara")));
+
+        mockMvc.perform(delete("/api/vendors/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testDeleteVendor_WhenNotFound() throws Exception {
+
+        when(vendorService.getVendorById(1L)).thenThrow(new NotFound404Exception("Vendor with id: '42' not found"));
+
+        mockMvc.perform(delete("/api/vendors/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testDeleteVendor_WhenInvalidArgumentSupplied() throws Exception {
+
+        mockMvc.perform(delete("/api/vendors/abc")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -203,21 +226,17 @@ public class VendorControllerTest {
 
         Product productToAdd = modelMapper.map(productDto, Product.class);
 
-        Set<Product> products = new HashSet<>();
+        List<Product> products = new ArrayList<>();
         products.add(productToAdd);
 
         vendor.setProducts(products);
 
-        when(vendorService.addProductToVendor(1L, productDto)).thenReturn(vendor);
+        when(vendorService.getVendorById(1L)).thenReturn(Optional.of(new Vendor(1L, "Zara")));
 
         mockMvc.perform(post("/api/vendors/1/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(productDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.vendorName", is("Zara")))
-                .andExpect(jsonPath("$.vendorId", is(1)))
-                .andExpect(jsonPath("$.products", contains(productToAdd)));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -241,7 +260,7 @@ public class VendorControllerTest {
         productDto.setUnitsInStock(15);
         productDto.setCategoryId(1L);
 
-        when(vendorService.addProductToVendor(42L, productDto)).thenThrow(new NotFound404Exception("Vendor with id: '42' not found"));
+        when(vendorService.getVendorById(42L)).thenThrow(new NotFound404Exception("Vendor with id: '42' not found"));
 
         mockMvc.perform(post("/api/vendors/42/products")
                         .contentType(MediaType.APPLICATION_JSON)

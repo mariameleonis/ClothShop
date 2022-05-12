@@ -1,6 +1,7 @@
 package com.epam.clothshop.model;
 
 import lombok.Data;
+import lombok.experimental.Tolerate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -30,4 +31,14 @@ public class Product {
 
     @Column(name="vendor_id", nullable = false)
     private Long vendorId;
+
+    @Tolerate
+    public Product(Long id, String name, BigDecimal price, int unitsInStock, Long categoryId, Long vendorId) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.unitsInStock = unitsInStock;
+        this.categoryId = categoryId;
+        this.vendorId = vendorId;
+    }
 }

@@ -2,6 +2,7 @@ package com.epam.clothshop.model;
 
 import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.Tolerate;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -20,4 +21,17 @@ public class Vendor {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "vendorId")
     private Set<Product> products;
+
+    @Tolerate
+    public Vendor(Long vendorId, String vendorName) {
+        this.vendorId = vendorId;
+        this.vendorName = vendorName;
+    }
+
+    @Tolerate
+    public Vendor(Long vendorId, String vendorName, Set<Product> products) {
+        this.vendorId = vendorId;
+        this.vendorName = vendorName;
+        this.products = products;
+    }
 }

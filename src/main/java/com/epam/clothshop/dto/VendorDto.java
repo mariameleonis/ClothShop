@@ -25,5 +25,5 @@ public class VendorDto {
 
     @NotEmpty(groups = {New.class, Update.class})
     @Size(min = 2, max = 25, groups = {New.class, Update.class})
-    private Long vendorName;
+    private String vendorName;
 }

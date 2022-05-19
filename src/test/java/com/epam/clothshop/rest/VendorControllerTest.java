@@ -114,7 +114,7 @@ public class VendorControllerTest {
     @Test
     public void testGetVendorById_WhenEverythingIsOk() throws Exception {
 
-        when(vendorService.getVendorById(VENDOR_1.getVendorId())).thenReturn(Optional.of(VENDOR_1));
+        when(vendorService.getVendorById(VENDOR_1.getVendorId())).thenReturn(VENDOR_1);
 
         mockMvc.perform(get("/api/vendors/1"))
                 .andExpect(status().isOk())
@@ -135,7 +135,7 @@ public class VendorControllerTest {
     @Test
     public void testGetProductsByVendor_WhenEverythingIsOk() throws Exception {
 
-        when(vendorService.getVendorById(VENDOR_1.getVendorId())).thenReturn(Optional.of(VENDOR_1));
+        when(vendorService.getVendorById(VENDOR_1.getVendorId())).thenReturn(VENDOR_1);
 
         List<Product> products = VENDOR_1.getProducts();
 
@@ -168,7 +168,7 @@ public class VendorControllerTest {
 
         VendorDto vendorDto = modelMapper.map(VENDOR_2_UPDATE, VendorDto.class);
 
-        when(vendorService.getVendorById(VENDOR_2.getVendorId())).thenReturn(Optional.of(VENDOR_2));
+        when(vendorService.getVendorById(VENDOR_2.getVendorId())).thenReturn(VENDOR_2);
         when(vendorService.updateVendor(eq(VENDOR_2.getVendorId()), argumentCaptor.capture())).thenReturn(VENDOR_2_UPDATE);
 
         mockMvc.perform(put("/api/vendors/2")
@@ -201,7 +201,7 @@ public class VendorControllerTest {
     @Test
     public void testDeleteVendor_WhenEverythingIsOk() throws Exception {
 
-        when(vendorService.getVendorById(VENDOR_1.getVendorId())).thenReturn(Optional.of(VENDOR_1));
+        when(vendorService.getVendorById(VENDOR_1.getVendorId())).thenReturn(VENDOR_1);
 
         mockMvc.perform(delete("/api/vendors/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -211,7 +211,7 @@ public class VendorControllerTest {
     @Test
     public void testDeleteVendor_WhenNotFound() throws Exception {
 
-        when(vendorService.getVendorById(VENDOR_1.getVendorId())).thenThrow(new ResourceNotFoundException("Vendor with id: '42' not found"));
+        when(vendorService.deleteVendorById(VENDOR_1.getVendorId())).thenThrow(new ResourceNotFoundException("Vendor with id: '42' not found"));
 
         mockMvc.perform(delete("/api/vendors/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -229,7 +229,7 @@ public class VendorControllerTest {
     @Test
     public void testAddProductToVendor_WhenEverythingIsOk() throws Exception {
 
-        when(vendorService.getVendorById(VENDOR_1.getVendorId())).thenReturn(Optional.of(VENDOR_1));
+        when(vendorService.getVendorById(VENDOR_1.getVendorId())).thenReturn(VENDOR_1);
 
         mockMvc.perform(post("/api/vendors/1/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -252,7 +252,7 @@ public class VendorControllerTest {
     @Test
     public void testAddProductToVendor_WhenVendorNotFound() throws Exception {
 
-        when(vendorService.getVendorById(42L)).thenThrow(new ResourceNotFoundException("Vendor with id: '42' not found"));
+        when(vendorService.addProductToVendor(42L, VALID_PRODUCT_DTO)).thenThrow(new ResourceNotFoundException("Vendor with id: '42' not found"));
 
         mockMvc.perform(post("/api/vendors/42/products")
                         .contentType(MediaType.APPLICATION_JSON)

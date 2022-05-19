@@ -4,6 +4,7 @@ import com.epam.clothshop.dao.VendorRepository;
 import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.dto.ProductDto;
 import com.epam.clothshop.dto.VendorDto;
+import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.Vendor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,14 @@ public class VendorService {
     }
 
     public Vendor getVendorById(long id) {
-        return null;
+
+        Optional<Vendor> requestedVendor = vendorRepository.findById(id);
+
+        if (requestedVendor.isEmpty()) {
+                throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
+        }
+
+        return requestedVendor.get();
     }
 
     public Vendor updateVendor(long id, VendorDto vendorDto) {

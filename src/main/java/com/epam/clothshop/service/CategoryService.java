@@ -36,7 +36,7 @@ public class CategoryService {
         Optional<Category> requestedCategory = categoryRepository.findById(id);
 
         if (requestedCategory.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Category with id: '%s' not found"));
+            throw new ResourceNotFoundException(String.format("Category with id: '%s' not found", id));
         }
 
         return requestedCategory.get();

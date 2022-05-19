@@ -68,7 +68,7 @@ public class VendorServiceTest {
 
         when(vendorRepository.findById(VENDOR_2.getVendorId())).thenReturn(Optional.of(VENDOR_2));
 
-        Vendor resultVendor = vendorService.getVendorById(VENDOR_1.getVendorId());
+        Vendor resultVendor = vendorService.getVendorById(VENDOR_2.getVendorId());
 
         assertThat(resultVendor.getVendorId(), is(VENDOR_2.getVendorId()));
         assertThat(resultVendor.getVendorName(), is(VENDOR_2.getVendorName()));

@@ -19,7 +19,7 @@ import java.util.Optional;
 import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class VendorServiceTest {
@@ -84,5 +84,15 @@ public class VendorServiceTest {
         Vendor vendor = vendorService.updateVendor(VENDOR_2.getVendorId(), vendorDto);
 
         assertThat(vendor.getVendorName(), is(VENDOR_2_UPDATE.getVendorName()));
+    }
+
+    @Test
+    public void deleteVendorByIdTest() {
+
+       doNothing().when(vendorRepository).deleteById(VENDOR_3.getVendorId());
+
+       vendorService.deleteVendorById(VENDOR_3.getVendorId());
+
+       verify(vendorRepository, times(1)).deleteById(VENDOR_3.getVendorId());
     }
 }

@@ -29,7 +29,8 @@ public class VendorService {
     }
 
     public List<Vendor> getVendors() {
-        return null;
+
+        return vendorRepository.findAll();
     }
 
     public Vendor getVendorById(long id) {

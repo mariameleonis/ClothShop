@@ -60,6 +60,10 @@ public class VendorService {
     }
 
     public Vendor deleteVendorById(Long id) {
-        return null;
+
+        Vendor vendor = getVendorById(id);
+        vendorRepository.deleteById(id);
+
+        return vendor;
     }
 }

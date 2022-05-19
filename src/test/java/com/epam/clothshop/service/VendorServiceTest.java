@@ -89,6 +89,8 @@ public class VendorServiceTest {
     @Test
     public void deleteVendorByIdTest() {
 
+        when(vendorRepository.findById(VENDOR_3.getVendorId())).thenReturn(Optional.of(VENDOR_3));
+
        doNothing().when(vendorRepository).deleteById(VENDOR_3.getVendorId());
 
        vendorService.deleteVendorById(VENDOR_3.getVendorId());

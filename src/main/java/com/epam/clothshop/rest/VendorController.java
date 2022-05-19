@@ -45,60 +45,26 @@ public class VendorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Vendor> getVendorById(@PathVariable("id") Long id) {
-
-        Optional<Vendor> vendor = vendorService.getVendorById(id);
-
-        if (vendor.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
-        }
-        return ResponseEntity.ok(vendor.get());
+        return ResponseEntity.ok(vendorService.getVendorById(id));
     }
 
     @GetMapping("/{id}/products")
     public ResponseEntity<List<Product>> getProductsByVendor(@PathVariable("id") Long id) {
-
-        Optional<Vendor> vendor = vendorService.getVendorById(id);
-
-        if (vendor.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
-        }
-
-        return ResponseEntity.ok(vendor.get().getProducts());
+        return ResponseEntity.ok(vendorService.getVendorById(id).getProducts());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Vendor> updateVendor(@PathVariable("id") Long id, @Validated(VendorDto.Update.class) @RequestBody VendorDto vendorDto) {
-
-        Optional<Vendor> vendor = vendorService.getVendorById(id);
-
-        if (vendor.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
-        }
-
         return ResponseEntity.ok(vendorService.updateVendor(id, vendorDto));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteVendorById(@PathVariable("id") Long id) {
-
-        Optional<Vendor> vendor = vendorService.getVendorById(id);
-
-        if (vendor.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
-        }
-
-        vendorService.deleteVendorById(id);
+    public ResponseEntity<Vendor> deleteVendorById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(vendorService.deleteVendorById(id));
     }
 
     @PostMapping("/{id}/products")
     public void addProductToVendor(@PathVariable("id") Long id, @Validated(ProductDto.AddToVendor.class) @RequestBody ProductDto productDto) {
-
-        Optional<Vendor> vendor = vendorService.getVendorById(id);
-
-        if (vendor.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
-        }
-
         vendorService.addProductToVendor(id, productDto);
     }
 }

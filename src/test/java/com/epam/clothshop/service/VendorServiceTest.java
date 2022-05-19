@@ -36,14 +36,14 @@ public class VendorServiceTest {
     @Test
     public void testSaveVendor() {
 
-        VendorDto vendorDto = modelMapper.map(VENDOR_1, VendorDto.class);
+        VendorDto vendorDto = new VendorDto(VENDOR_2.getVendorName());
 
-        when(vendorRepository.save(argumentCaptor.capture())).thenReturn(VENDOR_1);
+        when(vendorRepository.save(argumentCaptor.capture())).thenReturn(VENDOR_2);
 
         Long resultVendorId = vendorService.createVendor(vendorDto);
 
-        assertThat(resultVendorId, is(VENDOR_1.getVendorId()));
+        assertThat(resultVendorId, is(VENDOR_2.getVendorId()));
 
-        assertThat(argumentCaptor.getValue().getVendorName(), is(VENDOR_1.getVendorName()));
+        assertThat(argumentCaptor.getValue().getVendorName(), is(VENDOR_2.getVendorName()));
     }
 }

@@ -5,12 +5,14 @@ import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.dto.ProductDto;
 import com.epam.clothshop.dto.VendorDto;
 import com.epam.clothshop.exception.ResourceNotFoundException;
+import com.epam.clothshop.model.Product;
 import com.epam.clothshop.model.Vendor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -18,6 +20,9 @@ public class VendorService {
 
     @Autowired
     private VendorRepository vendorRepository;
+
+    @Autowired
+    private ModelMapper mapper;
 
     public Long createVendor(VendorDto vendorDto) {
 
@@ -55,8 +60,22 @@ public class VendorService {
         return vendor;
     }
 
+    @Transactional
     public Vendor addProductToVendor(long id, ProductDto productDto) {
-        return null;
+
+        Product productToAdd = mapper.map(productDto, Product.class);
+        Vendor vendor = getVendorById(id);
+        List<Product> products = vendor.getProducts();
+
+        if(products == null) {
+            products = new ArrayList<>();
+        }
+
+        products.add(productToAdd);
+
+        vendor.setProducts(products);
+
+        return vendor;
     }
 
     public Vendor deleteVendorById(Long id) {

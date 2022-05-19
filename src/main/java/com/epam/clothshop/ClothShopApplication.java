@@ -1,5 +1,6 @@
 package com.epam.clothshop;
 
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.SpringApplication;
@@ -26,6 +27,7 @@ public class ClothShopApplication {
                 .setMatchingStrategy(MatchingStrategies.STRICT)
                 .setFieldMatchingEnabled(true)
                 .setSkipNullEnabled(true)
+                .setPropertyCondition(Conditions.isNotNull())
                 .setFieldAccessLevel(PRIVATE);
         return mapper;
     }

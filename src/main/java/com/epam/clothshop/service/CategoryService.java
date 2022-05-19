@@ -2,6 +2,7 @@ package com.epam.clothshop.service;
 
 import com.epam.clothshop.dao.CategoryRepository;
 import com.epam.clothshop.dto.CategoryDto;
+import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.Category;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,14 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public Optional<Category> getCategoryById(long id) {
-        return categoryRepository.findById(id);
+    public Category getCategoryById(long id) {
+
+        Optional<Category> requestedCategory = categoryRepository.findById(id);
+
+        if (requestedCategory.isEmpty()) {
+            throw new ResourceNotFoundException(String.format("Category with id: '%s' not found"));
+        }
+
+        return requestedCategory.get();
     }
 }

@@ -2,7 +2,9 @@ package com.epam.clothshop.service;
 
 import com.epam.clothshop.dao.VendorRepository;
 import com.epam.clothshop.dto.VendorDto;
+import com.epam.clothshop.model.Product;
 import com.epam.clothshop.model.Vendor;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
@@ -26,6 +29,9 @@ public class VendorServiceTest {
 
     @Mock
     private VendorRepository vendorRepository;
+
+    @Mock
+    private ModelMapper vendorMapper;
 
     @InjectMocks
     private VendorService vendorService;
@@ -89,12 +95,25 @@ public class VendorServiceTest {
     @Test
     public void deleteVendorByIdTest() {
 
-        when(vendorRepository.findById(VENDOR_3.getVendorId())).thenReturn(Optional.of(VENDOR_3));
+       when(vendorRepository.findById(VENDOR_3.getVendorId())).thenReturn(Optional.of(VENDOR_3));
 
        doNothing().when(vendorRepository).deleteById(VENDOR_3.getVendorId());
 
        vendorService.deleteVendorById(VENDOR_3.getVendorId());
 
        verify(vendorRepository, times(1)).deleteById(VENDOR_3.getVendorId());
+    }
+
+    @Test
+    public void addProductToVendorTest() {
+
+        Product productToAdd = modelMapper.map(VALID_PRODUCT_DTO, Product.class);
+
+        when(vendorMapper.map(VALID_PRODUCT_DTO, Product.class)).thenReturn(productToAdd);
+
+        when(vendorRepository.findById(VENDOR_2.getVendorId())).thenReturn(Optional.of(VENDOR_2));
+        Vendor vendor = vendorService.addProductToVendor(VENDOR_2.getVendorId(), VALID_PRODUCT_DTO);
+
+        assertThat(vendor.getProducts(), Matchers.contains(productToAdd));
     }
 }

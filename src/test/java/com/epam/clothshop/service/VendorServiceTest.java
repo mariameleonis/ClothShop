@@ -18,6 +18,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootTest
 public class VendorServiceTest {
 
@@ -45,5 +48,19 @@ public class VendorServiceTest {
         assertThat(resultVendorId, is(VENDOR_2.getVendorId()));
 
         assertThat(argumentCaptor.getValue().getVendorName(), is(VENDOR_2.getVendorName()));
+    }
+
+    @Test
+    public void testGetAllVendors() {
+
+        List<Vendor> vendors = new ArrayList<>(List.of(VENDOR_1, VENDOR_2, VENDOR_3));
+
+        when(vendorRepository.findAll()).thenReturn(vendors);
+
+        List<Vendor> resultVendors = vendorService.getVendors();
+
+        assertThat(resultVendors.size(), is(vendors.size()));
+        assertThat(resultVendors.get(0).getVendorId(), is(VENDOR_1.getVendorId()));
+        assertThat(resultVendors.get(0).getVendorName(), is(VENDOR_1.getVendorName()));
     }
 }

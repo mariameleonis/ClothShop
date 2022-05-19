@@ -4,22 +4,17 @@ import com.epam.clothshop.dao.CategoryRepository;
 import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.model.Category;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.lang.model.util.Types;
-
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -72,10 +67,10 @@ public class CategoryServiceTest {
 
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(createCategory(1L, "Dresses")));
 
-        Optional<Category> resultCategory = categoryService.getCategoryById(1L);
+        Category resultCategory = categoryService.getCategoryById(1L);
 
-        assertThat(resultCategory.get().getCategoryId(), is(1L));
-        assertThat(resultCategory.get().getCategoryName(), is("Dresses"));
+        assertThat(resultCategory.getCategoryId(), is(1L));
+        assertThat(resultCategory.getCategoryName(), is("Dresses"));
     }
 
     private Category createCategory(long id, String name) {

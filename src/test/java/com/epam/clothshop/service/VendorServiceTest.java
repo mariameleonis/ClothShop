@@ -73,4 +73,16 @@ public class VendorServiceTest {
         assertThat(resultVendor.getVendorId(), is(VENDOR_2.getVendorId()));
         assertThat(resultVendor.getVendorName(), is(VENDOR_2.getVendorName()));
     }
+
+    @Test
+    public void updateVendorTest() {
+
+        VendorDto vendorDto = modelMapper.map(VENDOR_2_UPDATE, VendorDto.class);
+
+        when(vendorRepository.findById(VENDOR_2.getVendorId())).thenReturn(Optional.of(VENDOR_2));
+
+        Vendor vendor = vendorService.updateVendor(VENDOR_2.getVendorId(), vendorDto);
+
+        assertThat(vendor.getVendorName(), is(VENDOR_2_UPDATE.getVendorName()));
+    }
 }

@@ -45,24 +45,11 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable("id") Long id) {
-
-       Optional<Category> category = categoryService.getCategoryById(id);
-
-       if (category.isEmpty()) {
-           throw new ResourceNotFoundException(String.format("Category with id: '%s' not found"));
-       }
-       return ResponseEntity.ok(category.get());
+       return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @GetMapping("/{id}/products")
-    public ResponseEntity<Set<Product>> getProductsByCategory(@PathVariable("id") Long id) {
-
-        Optional<Category> category = categoryService.getCategoryById(id);
-
-        if (category.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Category with id: '%s' not found"));
-        }
-
-        return ResponseEntity.ok(category.get().getProducts());
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id).getProducts());
     }
 }

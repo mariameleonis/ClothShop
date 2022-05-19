@@ -1,14 +1,8 @@
 package com.epam.clothshop.service;
 
-import static com.epam.clothshop.ClothShopTestData.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
-
 import com.epam.clothshop.dao.VendorRepository;
 import com.epam.clothshop.dto.VendorDto;
 import com.epam.clothshop.model.Vendor;
-import com.epam.clothshop.rest.VendorControllerTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -20,6 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static com.epam.clothshop.ClothShopTestData.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class VendorServiceTest {
@@ -46,7 +46,6 @@ public class VendorServiceTest {
         Long resultVendorId = vendorService.createVendor(vendorDto);
 
         assertThat(resultVendorId, is(VENDOR_2.getVendorId()));
-
         assertThat(argumentCaptor.getValue().getVendorName(), is(VENDOR_2.getVendorName()));
     }
 
@@ -62,5 +61,16 @@ public class VendorServiceTest {
         assertThat(resultVendors.size(), is(vendors.size()));
         assertThat(resultVendors.get(0).getVendorId(), is(VENDOR_1.getVendorId()));
         assertThat(resultVendors.get(0).getVendorName(), is(VENDOR_1.getVendorName()));
+    }
+
+    @Test
+    public void testGetVendorById() {
+
+        when(vendorRepository.findById(VENDOR_2.getVendorId())).thenReturn(Optional.of(VENDOR_2));
+
+        Vendor resultVendor = vendorService.getVendorById(VENDOR_1.getVendorId());
+
+        assertThat(resultVendor.getVendorId(), is(VENDOR_2.getVendorId()));
+        assertThat(resultVendor.getVendorName(), is(VENDOR_2.getVendorName()));
     }
 }

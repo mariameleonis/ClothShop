@@ -95,7 +95,7 @@ public class CategoryControllerTest {
     @Test
     public void testGetCategoryById_WhenEverythingIsOk() throws Exception {
 
-        when(categoryService.getCategoryById(1L)).thenReturn(Optional.of(createCategory(1L, "Dresses")));
+        when(categoryService.getCategoryById(1L)).thenReturn(createCategory(1L, "Dresses"));
 
         mockMvc.perform(get("/api/categories/1"))
                 .andExpect(status().isOk())
@@ -117,11 +117,11 @@ public class CategoryControllerTest {
     public void testGetProductsByCategory_WhenEverythingIsOk() throws Exception {
 
         Category category = createCategory(1L, "Dresses");
-        category.setProducts(Set.of(createProduct(1L, "Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, 1L),
+        category.setProducts(List.of(createProduct(1L, "Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, 1L),
                 createProduct(2L, "Rose Cocktail Dress", BigDecimal.valueOf(110.70), 3, 1L, 2L),
                 createProduct(3L, "Night Blue Dress", BigDecimal.valueOf(98.40), 7, 1L, 3L)));
 
-        when(categoryService.getCategoryById(1L)).thenReturn(Optional.of(category));
+        when(categoryService.getCategoryById(1L)).thenReturn(category);
 
         mockMvc.perform(get("/api/categories/1/products"))
                 .andExpect(status().isOk())

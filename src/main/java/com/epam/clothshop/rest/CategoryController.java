@@ -1,10 +1,10 @@
 package com.epam.clothshop.rest;
 
 import com.epam.clothshop.dto.CategoryDto;
+import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.Category;
 import com.epam.clothshop.model.Product;
 import com.epam.clothshop.service.CategoryService;
-import com.epam.clothshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -50,7 +49,7 @@ public class CategoryController {
        Optional<Category> category = categoryService.getCategoryById(id);
 
        if (category.isEmpty()) {
-           throw new NotFound404Exception(String.format("Category with id: '%s' not found"));
+           throw new ResourceNotFoundException(String.format("Category with id: '%s' not found"));
        }
        return ResponseEntity.ok(category.get());
     }
@@ -61,7 +60,7 @@ public class CategoryController {
         Optional<Category> category = categoryService.getCategoryById(id);
 
         if (category.isEmpty()) {
-            throw new NotFound404Exception(String.format("Category with id: '%s' not found"));
+            throw new ResourceNotFoundException(String.format("Category with id: '%s' not found"));
         }
 
         return ResponseEntity.ok(category.get().getProducts());

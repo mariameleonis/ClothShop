@@ -1,23 +1,20 @@
 package com.epam.clothshop.rest;
 
 import com.epam.clothshop.dto.CategoryDto;
+import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.Category;
 import com.epam.clothshop.model.Product;
 import com.epam.clothshop.service.CategoryService;
-import com.epam.clothshop.service.ProductService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -110,7 +107,7 @@ public class CategoryControllerTest {
     @Test
     public void testGetCategoryById_WhenNotFound() throws Exception {
 
-        when(categoryService.getCategoryById(42L)).thenThrow(new NotFound404Exception("Category with id: '42' not found"));
+        when(categoryService.getCategoryById(42L)).thenThrow(new ResourceNotFoundException("Category with id: '42' not found"));
 
         mockMvc.perform(get("/api/categories/42"))
                 .andExpect(status().isNotFound());

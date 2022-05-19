@@ -1,9 +1,8 @@
 package com.epam.clothshop.rest;
 
-import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.dto.ProductDto;
 import com.epam.clothshop.dto.VendorDto;
-import com.epam.clothshop.model.Category;
+import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.Product;
 import com.epam.clothshop.model.Vendor;
 import com.epam.clothshop.service.VendorService;
@@ -16,10 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/vendors")
@@ -52,7 +49,7 @@ public class VendorController {
         Optional<Vendor> vendor = vendorService.getVendorById(id);
 
         if (vendor.isEmpty()) {
-            throw new NotFound404Exception(String.format("Vendor with id: '%s' not found", id));
+            throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
         }
         return ResponseEntity.ok(vendor.get());
     }
@@ -63,7 +60,7 @@ public class VendorController {
         Optional<Vendor> vendor = vendorService.getVendorById(id);
 
         if (vendor.isEmpty()) {
-            throw new NotFound404Exception(String.format("Vendor with id: '%s' not found", id));
+            throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
         }
 
         return ResponseEntity.ok(vendor.get().getProducts());
@@ -75,7 +72,7 @@ public class VendorController {
         Optional<Vendor> vendor = vendorService.getVendorById(id);
 
         if (vendor.isEmpty()) {
-            throw new NotFound404Exception(String.format("Vendor with id: '%s' not found", id));
+            throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
         }
 
         return ResponseEntity.ok(vendorService.updateVendor(id, vendorDto));
@@ -87,7 +84,7 @@ public class VendorController {
         Optional<Vendor> vendor = vendorService.getVendorById(id);
 
         if (vendor.isEmpty()) {
-            throw new NotFound404Exception(String.format("Vendor with id: '%s' not found", id));
+            throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
         }
 
         vendorService.deleteVendorById(id);
@@ -99,7 +96,7 @@ public class VendorController {
         Optional<Vendor> vendor = vendorService.getVendorById(id);
 
         if (vendor.isEmpty()) {
-            throw new NotFound404Exception(String.format("Vendor with id: '%s' not found", id));
+            throw new ResourceNotFoundException(String.format("Vendor with id: '%s' not found", id));
         }
 
         vendorService.addProductToVendor(id, productDto);

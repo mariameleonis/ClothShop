@@ -1,6 +1,7 @@
 package com.epam.clothshop.dto;
 
 import lombok.Data;
+import lombok.experimental.Tolerate;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -43,4 +44,12 @@ public class ProductDto extends Dto {
     @Null(groups = {UpdateImage.class, AddToVendor.class})
     @NotNull(groups = {New.class, Update.class})
     private Long vendorId;
+
+    @Tolerate
+    public ProductDto(String name, BigDecimal price, int unitsInStock, Long categoryId) {
+        this.name = name;
+        this.price = price;
+        this.unitsInStock = unitsInStock;
+        this.categoryId = categoryId;
+    }
 }

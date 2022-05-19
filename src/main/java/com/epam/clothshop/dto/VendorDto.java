@@ -24,4 +24,9 @@ public class VendorDto extends Dto {
         this.vendorId = vendorId;
         this.vendorName = vendorName;
     }
+
+    @Tolerate
+    public VendorDto(String vendorName) {
+        this.vendorName = vendorName;
+    }
 }

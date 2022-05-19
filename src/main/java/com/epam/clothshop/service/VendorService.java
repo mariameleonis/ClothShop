@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -45,8 +46,13 @@ public class VendorService {
         return requestedVendor.get();
     }
 
+    @Transactional
     public Vendor updateVendor(long id, VendorDto vendorDto) {
-        return null;
+
+        Vendor vendor = getVendorById(id);
+        vendor.setVendorName(vendorDto.getVendorName());
+
+        return vendor;
     }
 
     public Vendor addProductToVendor(long id, ProductDto productDto) {

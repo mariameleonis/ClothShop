@@ -1,7 +1,6 @@
 package com.epam.clothshop.rest;
 
 import com.epam.clothshop.dto.UserDto;
-import com.epam.clothshop.dto.VendorDto;
 import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.service.impl.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,13 +15,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static com.epam.clothshop.ClothShopTestData.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -47,7 +45,6 @@ public class UserControllerTest {
 
     @Test
     public void testCreateUser_WhenEverythingIsOk() throws Exception {
-
         when(userService.createUser(argumentCaptor.capture())).thenReturn(USER_3.getId());
 
         mockMvc.perform(post("/api/users")
@@ -107,7 +104,6 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateUser_WhenEverythingIsOk() throws Exception {
-
         UserDto userDto = modelMapper.map(USER_1_UPDATE, UserDto.class);
 
         when(userService.getUserById(USER_1.getId())).thenReturn(USER_1);
@@ -124,12 +120,11 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateUserWithUnknownId_WhenNotFound() throws Exception {
-
-        when(userService.getUserById(42L)).thenThrow(new ResourceNotFoundException("User with id: '42' not found"));
+        when(userService.updateUser(INVALID_USER_DTO_UPDATE)).thenThrow(new ResourceNotFoundException("User with id: '42' not found"));
 
         mockMvc.perform(put("/api/users/42")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(VALID_USER_DTO)))
+                        .content(objectMapper.writeValueAsString(INVALID_USER_DTO_UPDATE)))
                 .andExpect(status().isNotFound());
     }
 
@@ -153,9 +148,7 @@ public class UserControllerTest {
 
     @Test
     public void testDeleteUser_WhenNotFound() throws Exception {
-
-        when(userService.getUserById(42L)).thenThrow(new ResourceNotFoundException("User with id: '42' not found"));
-
+        doThrow(new ResourceNotFoundException("User with id: '42' not found")).when(userService).deleteUserById(42L);
         mockMvc.perform(delete("/api/users/42")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());

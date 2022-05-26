@@ -2,10 +2,9 @@ package com.epam.clothshop.rest;
 
 import com.epam.clothshop.dto.ProductDto;
 import com.epam.clothshop.dto.VendorDto;
-import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.Product;
 import com.epam.clothshop.model.Vendor;
-import com.epam.clothshop.service.VendorService;
+import com.epam.clothshop.service.impl.VendorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,14 +15,13 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/vendors")
 public class VendorController {
 
     @Autowired
-    private VendorService vendorService;
+    private VendorServiceImpl vendorService;
 
     @PostMapping
     public ResponseEntity<Void> createVendor(@Validated(VendorDto.New.class) @RequestBody VendorDto vendorDto,

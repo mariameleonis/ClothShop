@@ -4,7 +4,7 @@ import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.Category;
 import com.epam.clothshop.model.Product;
-import com.epam.clothshop.service.CategoryService;
+import com.epam.clothshop.service.impl.CategoryServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -18,8 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -40,7 +38,7 @@ public class CategoryControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private CategoryService categoryService;
+    private CategoryServiceImpl categoryService;
 
     @Captor
     private ArgumentCaptor<CategoryDto> argumentCaptor;

@@ -1,10 +1,9 @@
 package com.epam.clothshop.rest;
 
 import com.epam.clothshop.dto.CategoryDto;
-import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.Category;
 import com.epam.clothshop.model.Product;
-import com.epam.clothshop.service.CategoryService;
+import com.epam.clothshop.service.impl.CategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,15 +14,13 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
 
     @Autowired
-    private CategoryService categoryService;
+    private CategoryServiceImpl categoryService;
 
     @PostMapping
     public ResponseEntity<Void> createCategory(@Validated(CategoryDto.New.class) @RequestBody CategoryDto categoryDto,

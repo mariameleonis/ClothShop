@@ -5,7 +5,7 @@ import com.epam.clothshop.dto.VendorDto;
 import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.Product;
 import com.epam.clothshop.model.Vendor;
-import com.epam.clothshop.service.VendorService;
+import com.epam.clothshop.service.impl.VendorServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -43,7 +42,7 @@ public class VendorControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private VendorService vendorService;
+    private VendorServiceImpl vendorService;
 
     @Captor
     private ArgumentCaptor<VendorDto> argumentCaptor;

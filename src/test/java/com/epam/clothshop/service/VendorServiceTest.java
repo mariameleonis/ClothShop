@@ -4,6 +4,7 @@ import com.epam.clothshop.dao.VendorRepository;
 import com.epam.clothshop.dto.VendorDto;
 import com.epam.clothshop.model.Product;
 import com.epam.clothshop.model.Vendor;
+import com.epam.clothshop.service.impl.VendorServiceImpl;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -34,7 +35,7 @@ public class VendorServiceTest {
     private ModelMapper vendorMapper;
 
     @InjectMocks
-    private VendorService vendorService;
+    private VendorServiceImpl vendorService;
 
     @Captor
     private ArgumentCaptor<Vendor> argumentCaptor;

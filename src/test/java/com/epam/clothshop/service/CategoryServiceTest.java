@@ -3,6 +3,7 @@ package com.epam.clothshop.service;
 import com.epam.clothshop.dao.CategoryRepository;
 import com.epam.clothshop.dto.CategoryDto;
 import com.epam.clothshop.model.Category;
+import com.epam.clothshop.service.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -24,7 +25,7 @@ public class CategoryServiceTest {
     private CategoryRepository categoryRepository;
 
     @InjectMocks
-    private CategoryService categoryService;
+    private CategoryServiceImpl categoryService;
 
     @Captor
     private ArgumentCaptor<Category> argumentCaptor;

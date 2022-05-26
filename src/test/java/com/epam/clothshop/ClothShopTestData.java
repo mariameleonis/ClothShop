@@ -34,5 +34,6 @@ public class ClothShopTestData {
 
     public static final UserDto VALID_USER_DTO = new UserDto("svetlana999", "Svetlana", "Petrova", "petrova.s@gmail.com", "12345", "77056056789");
 
+    public static final UserDto INVALID_USER_DTO_UPDATE = new UserDto(42L, "svetlana999", "Svetlana", "Petrova", "petrova.s@gmail.com", "12345", "77056056789");
     public static final UserDto INVALID_USER_DTO = new UserDto("", "", "", "", "", "");
 }

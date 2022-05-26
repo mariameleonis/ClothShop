@@ -1,5 +1,6 @@
 package com.epam.clothshop.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@AllArgsConstructor
 @ToString(exclude = "orderIds")
 public class User {
 

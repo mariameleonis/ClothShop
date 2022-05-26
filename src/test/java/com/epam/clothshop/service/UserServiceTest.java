@@ -19,6 +19,7 @@ import java.util.Optional;
 import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -46,13 +47,7 @@ public class UserServiceTest {
 
         List<User> resultUsers = userService.getUsers();
 
-        assertThat(resultUsers.size(), is(USERS_LIST.size()));
-        assertThat(resultUsers.get(0).getFirstName(), is(USER_1.getFirstName()));
-        assertThat(resultUsers.get(0).getLastName(), is(USER_1.getLastName()));
-        assertThat(resultUsers.get(1).getFirstName(), is(USER_2.getFirstName()));
-        assertThat(resultUsers.get(1).getLastName(), is(USER_2.getLastName()));
-        assertThat(resultUsers.get(2).getFirstName(), is(USER_3.getFirstName()));
-        assertThat(resultUsers.get(2).getLastName(), is(USER_3.getLastName()));
+        assertEquals(resultUsers, USERS_LIST);
     }
 
     @Test
@@ -62,8 +57,7 @@ public class UserServiceTest {
 
         User resultUser = userService.getUserById(USER_1.getId());
 
-        assertThat(resultUser.getId(), is(USER_1.getId()));
-        assertThat(resultUser.getFirstName(), is(USER_1.getFirstName()));
+        assertEquals(resultUser, USER_1);
     }
 
     @Test
@@ -90,8 +84,7 @@ public class UserServiceTest {
 
         User user = userService.updateUser(userDto);
 
-        assertThat(user.getLastName(), is(USER_1_UPDATE.getLastName()));
-        assertThat(user.getEmail(), is(USER_1_UPDATE.getEmail()));
+        assertEquals(user, USER_1_UPDATE);
     }
 
     @Test

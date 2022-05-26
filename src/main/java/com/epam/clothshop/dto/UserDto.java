@@ -46,6 +46,7 @@ public class UserDto {
     @Length(min = 16, max = 16, groups = {New.class, Update.class})
     private String phone;
 
+    @Tolerate
     public UserDto(String username, String firstName, String lastName, String email, String password, String phone) {
         this.username = username;
         this.firstName = firstName;

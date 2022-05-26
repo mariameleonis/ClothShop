@@ -2,9 +2,8 @@ package com.epam.clothshop.service;
 
 import com.epam.clothshop.dao.UserRepository;
 import com.epam.clothshop.dto.UserDto;
-import com.epam.clothshop.dto.VendorDto;
 import com.epam.clothshop.model.User;
-import com.epam.clothshop.model.Vendor;
+import com.epam.clothshop.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -14,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +20,6 @@ import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @SpringBootTest
 public class UserServiceTest {
@@ -54,8 +51,8 @@ public class UserServiceTest {
         assertThat(resultUsers.get(0).getLastName(), is(USER_1.getLastName()));
         assertThat(resultUsers.get(1).getFirstName(), is(USER_2.getFirstName()));
         assertThat(resultUsers.get(1).getLastName(), is(USER_2.getLastName()));
-        assertThat(resultUsers.get(3).getFirstName(), is(USER_3.getFirstName()));
-        assertThat(resultUsers.get(3).getLastName(), is(USER_3.getLastName()));
+        assertThat(resultUsers.get(2).getFirstName(), is(USER_3.getFirstName()));
+        assertThat(resultUsers.get(2).getLastName(), is(USER_3.getLastName()));
     }
 
     @Test
@@ -72,6 +69,8 @@ public class UserServiceTest {
     @Test
     public void testCreateUser() {
 
+        when(userMapper.map(VALID_USER_DTO, User.class)).thenReturn(USER_3);
+
         when(userRepository.save(argumentCaptor.capture())).thenReturn(USER_3);
 
         Long resultUserId = userService.createUser(VALID_USER_DTO);
@@ -85,9 +84,11 @@ public class UserServiceTest {
 
         UserDto userDto = modelMapper.map(USER_1_UPDATE, UserDto.class);
 
-        when(userRepository.findById(USER_1.getId())).thenReturn(Optional.of(USER_1));
+        when(userMapper.map(userDto, User.class)).thenReturn(USER_1_UPDATE);
 
-        User user = userService.updateUser(USER_1.getId(), userDto);
+        when(userRepository.save(USER_1_UPDATE)).thenReturn(USER_1_UPDATE);
+
+        User user = userService.updateUser(userDto);
 
         assertThat(user.getLastName(), is(USER_1_UPDATE.getLastName()));
         assertThat(user.getEmail(), is(USER_1_UPDATE.getEmail()));

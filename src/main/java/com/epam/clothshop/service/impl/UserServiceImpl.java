@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long createUser(UserDto userDto) {
-
         return userRepository.save(convertDtoToEntity(userDto)).getId();
     }
 
@@ -43,13 +42,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(UserDto userDto) {
-
+        getUserById(userDto.getId());
         return userRepository.save(convertDtoToEntity(userDto));
     }
 
     @Override
     public void deleteUserById(Long id) {
-
+        getUserById(id);
         userRepository.deleteById(id);
     }
 }

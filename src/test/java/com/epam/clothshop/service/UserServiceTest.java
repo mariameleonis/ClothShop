@@ -78,6 +78,8 @@ public class UserServiceTest {
 
         UserDto userDto = modelMapper.map(USER_1_UPDATE, UserDto.class);
 
+        when(userRepository.findById(userDto.getId())).thenReturn(Optional.of(USER_1));
+
         when(userMapper.map(userDto, User.class)).thenReturn(USER_1_UPDATE);
 
         when(userRepository.save(USER_1_UPDATE)).thenReturn(USER_1_UPDATE);

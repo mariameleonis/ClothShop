@@ -33,4 +33,6 @@ public class ClothShopTestData {
     public static final List<User> USERS_LIST = new ArrayList<>(List.of(USER_1, USER_2, USER_3));
 
     public static final UserDto VALID_USER_DTO = new UserDto("svetlana999", "Svetlana", "Petrova", "petrova.s@gmail.com", "12345", "77056056789");
+
+    public static final UserDto INVALID_USER_DTO = new UserDto("", "", "", "", "", "");
 }

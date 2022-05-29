@@ -4,6 +4,7 @@ import com.epam.clothshop.dao.ProductRepository;
 import com.epam.clothshop.dto.ProductDto;
 import com.epam.clothshop.model.Product;
 import com.epam.clothshop.model.User;
+import com.epam.clothshop.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -11,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 public class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
@@ -39,7 +42,6 @@ public class ProductServiceTest {
 
     @Test
     public void testGetAllProducts() {
-
         when(productRepository.findAll()).thenReturn(PRODUCT_LIST);
 
         List<Product> resultProducts = productService.getProducts();
@@ -60,14 +62,14 @@ public class ProductServiceTest {
     @Test
     public void testCreateProduct() {
 
-        when(productMapper.map(VALID_PRODUCT_DTO, User.class)).thenReturn(PRODUCT_3);
+        when(productMapper.map(VALID_PRODUCT_DTO, Product.class)).thenReturn(PRODUCT_1);
 
-        when(productRepository.save(argumentCaptor.capture())).thenReturn(PRODUCT_3);
+        when(productRepository.save(argumentCaptor.capture())).thenReturn(PRODUCT_1);
 
         Long resultProductId = productService.createProduct(VALID_PRODUCT_DTO);
 
-        assertThat(resultProductId, is(PRODUCT_3.getId()));
-        assertThat(argumentCaptor.getValue().getName(), is(PRODUCT_3.getName()));
+        assertThat(resultProductId, is(PRODUCT_1.getId()));
+        assertThat(argumentCaptor.getValue().getName(), is(PRODUCT_1.getName()));
     }
 
     @Test
@@ -81,7 +83,7 @@ public class ProductServiceTest {
 
         when(productRepository.save(PRODUCT_1_UPDATE)).thenReturn(PRODUCT_1_UPDATE);
 
-        Product product = productService.updateProduct();
+        Product product = productService.updateProduct(productDto);
 
         assertEquals(product, PRODUCT_1_UPDATE);
     }

@@ -14,7 +14,8 @@ public class ClothShopTestData {
     public static final Product PRODUCT_1 = new Product(1L, "Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, 1L);
     public static final Product PRODUCT_2 = new Product(2L, "Floral Cocktail Dress", BigDecimal.valueOf(110.70), 10, 1L, 1L);
     public static final Product PRODUCT_3 = new Product(3L, "Blue Polka-Dot Dress", BigDecimal.valueOf(100.90), 19, 1L, 1L);
-
+    public static final List<Product> PRODUCT_LIST = new ArrayList<>(List.of(PRODUCT_1, PRODUCT_2, PRODUCT_3));
+    public static final Product PRODUCT_1_UPDATE = new Product(1L, "Little Red Dress", BigDecimal.valueOf(113.90), 10, 1L, 1L);
     public static final Vendor VENDOR_1 = new Vendor(1L, "H&M", List.of(PRODUCT_1, PRODUCT_2, PRODUCT_3));
     public static final Vendor VENDOR_2 = new Vendor(2L, "Zara");
 
@@ -36,4 +37,5 @@ public class ClothShopTestData {
 
     public static final UserDto INVALID_USER_DTO_UPDATE = new UserDto(42L, "svetlana999", "Svetlana", "Petrova", "petrova.s@gmail.com", "12345", "77056056789");
     public static final UserDto INVALID_USER_DTO = new UserDto("", "", "", "", "", "");
+
 }

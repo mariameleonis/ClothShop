@@ -84,31 +84,23 @@ public class ClothShopInitializer implements CommandLineRunner {
 
             Order order = new Order();
 
-            order.setUserId((long) faker.number().numberBetween(1, 10));
-            order.setShipDate(LocalDate.now().plusDays(faker.number().numberBetween(1,5)));
-
-            Set<OrderItem> orderItems = new HashSet<>();
             BigDecimal totalPrice = BigDecimal.valueOf(0);
-
-            order.setTotalPrice(totalPrice);
-            order.setOrderItems(orderItems);
-
-            orderRepository.save(order);
 
             OrderItem orderItem = new OrderItem();
 
-            orderItem.setOrderId(order.getOrderId());
             orderItem.setProductId((long) faker.number().numberBetween(1, 50));
             orderItem.setSellingPrice(productRepository.getById(orderItem.getProductId()).getPrice());
             orderItem.setQuantity(faker.number().numberBetween(1, 5));
 
-            orderItems.add(orderItem);
+            order.add(orderItem);
             totalPrice = BigDecimal.valueOf(totalPrice.doubleValue() + (orderItem.getSellingPrice().doubleValue() * orderItem.getQuantity()));
 
             order.setTotalPrice(totalPrice);
-            order.setOrderItems(orderItems);
 
-            orderRepository.save(order);
+            User user = userRepository.getById((long) faker.number().numberBetween(1, 10));
+            user.add(order);
+
+            userRepository.save(user);
         }
 
         log.info("Finish with sample data initialization.");

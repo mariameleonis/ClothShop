@@ -17,4 +17,9 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderById(Long id) {
         return null;
     }
+
+    @Override
+    public void deleteOrderById(Long id) {
+        getOrderById(id);
+    }
 }

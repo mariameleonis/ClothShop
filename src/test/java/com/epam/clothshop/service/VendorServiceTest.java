@@ -108,12 +108,12 @@ public class VendorServiceTest {
     @Test
     public void addProductToVendorTest() {
 
-        Product productToAdd = modelMapper.map(VALID_PRODUCT_DTO, Product.class);
+        Product productToAdd = modelMapper.map(VALID_PRODUCT_DTO_ADD_TO_VENDOR, Product.class);
 
-        when(vendorMapper.map(VALID_PRODUCT_DTO, Product.class)).thenReturn(productToAdd);
+        when(vendorMapper.map(VALID_PRODUCT_DTO_ADD_TO_VENDOR, Product.class)).thenReturn(productToAdd);
 
         when(vendorRepository.findById(VENDOR_2.getVendorId())).thenReturn(Optional.of(VENDOR_2));
-        Vendor vendor = vendorService.addProductToVendor(VENDOR_2.getVendorId(), VALID_PRODUCT_DTO);
+        Vendor vendor = vendorService.addProductToVendor(VENDOR_2.getVendorId(), VALID_PRODUCT_DTO_ADD_TO_VENDOR);
 
         assertThat(vendor.getProducts(), Matchers.contains(productToAdd));
     }

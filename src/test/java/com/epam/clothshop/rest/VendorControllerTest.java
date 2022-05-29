@@ -60,7 +60,7 @@ public class VendorControllerTest {
     final Vendor VENDOR_2_UPDATE = new Vendor(2L, "Mango");
     final Vendor VENDOR_3 = new Vendor(3L, "Bershka");
 
-    final ProductDto VALID_PRODUCT_DTO = new ProductDto("Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L);
+    final ProductDto VALID_PRODUCT_DTO = new ProductDto("Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, null);
 
     @Test
     public void testCreateVendor_WhenEverythingIsOk() throws Exception {

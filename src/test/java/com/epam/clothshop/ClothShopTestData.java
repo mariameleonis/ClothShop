@@ -22,8 +22,11 @@ public class ClothShopTestData {
     public static final Vendor VENDOR_2_UPDATE = new Vendor(2L, "Mango");
     public static final Vendor VENDOR_3 = new Vendor(3L, "Bershka");
 
-    public static final ProductDto VALID_PRODUCT_DTO = new ProductDto("Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L);
+    public static final ProductDto VALID_PRODUCT_DTO_ADD_TO_VENDOR = new ProductDto("Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, null);
 
+    public static final ProductDto VALID_PRODUCT_DTO = new ProductDto("Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, 1L);
+    public static final ProductDto INVALID_PRODUCT_DTO = new ProductDto("", BigDecimal.valueOf(120.50), 15, 1L, 1L);
+    public static final ProductDto INVALID_PRODUCT_DTO_UPDATE = new ProductDto(42L, "Little Black Dress", BigDecimal.valueOf(120.50), 15, 1L, 1L);
     public static final User USER_1 = new User(1L, "mariya888", "Mariya", "Russakova", "russakova.m@gmail.com", "12345", "77056081966", null);
 
     public static final User USER_1_UPDATE = new User(1L, "mariya888", "Mariya", "Ivanova", "ivanova.m@gmail.com", "12345", "77056081966", null);

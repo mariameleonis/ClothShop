@@ -1,5 +1,6 @@
 package com.epam.clothshop.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Tolerate;
 
@@ -46,10 +47,21 @@ public class ProductDto extends Dto {
     private Long vendorId;
 
     @Tolerate
-    public ProductDto(String name, BigDecimal price, int unitsInStock, Long categoryId) {
+    public ProductDto(String name, BigDecimal price, int unitsInStock, Long categoryId, Long vendorId) {
         this.name = name;
         this.price = price;
         this.unitsInStock = unitsInStock;
         this.categoryId = categoryId;
+        this.vendorId = vendorId;
+    }
+
+    @Tolerate
+    public ProductDto(Long id, String name, BigDecimal price, int unitsInStock, Long categoryId, Long vendorId) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.unitsInStock = unitsInStock;
+        this.categoryId = categoryId;
+        this.vendorId = vendorId;
     }
 }

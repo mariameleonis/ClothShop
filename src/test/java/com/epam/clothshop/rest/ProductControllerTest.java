@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,14 +44,14 @@ public class ProductControllerTest {
 
     @Test
     public void testCreateProduct_WhenEverythingIsOk() throws Exception {
-        when(userService.createProduct(argumentCaptor.capture())).thenReturn(PRODUCT_1.getId());
+        when(productService.createProduct(argumentCaptor.capture())).thenReturn(PRODUCT_1.getId());
 
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(VALID_PRODUCT_DTO)))
                 .andExpect(status().isCreated());
 
-        assertThat(argumentCaptor.getValue().getName(), is(VALID_PRODUCT_DTO.getName()));
+        assertThat(argumentCaptor.getValue().getName(), is(VALID_PRODUCT_DTO_ADD_TO_VENDOR.getName()));
     }
 
     @Test
@@ -67,32 +66,33 @@ public class ProductControllerTest {
     @Test
     public void testGetAllProducts_WhenEverythingIsOk() throws Exception {
 
-        when(userService.getProducts()).thenReturn(PRODUCT_LIST);
+        when(productService.getProducts()).thenReturn(PRODUCT_LIST);
 
         mockMvc.perform(get("/api/products"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(PRODUCT_LIST.size())))
-                .andExpect((ResultMatcher) jsonPath("$[0]", equals(PRODUCT_1)))
-                .andExpect((ResultMatcher) jsonPath("$[1]", equals(PRODUCT_2)))
-                .andExpect((ResultMatcher) jsonPath("$[2]", equals(PRODUCT_3)));
+                .andExpect(jsonPath("$[0].id", is(PRODUCT_1.getId().intValue())))
+                .andExpect(jsonPath("$[1].id", is(PRODUCT_2.getId().intValue())))
+                .andExpect(jsonPath("$[2].id", is(PRODUCT_3.getId().intValue())));
     }
 
     @Test
     public void testGetProductById_WhenEverythingIsOk() throws Exception {
 
-        when(userService.getProductById(PRODUCT_1.getId())).thenReturn(PRODUCT_1);
+        when(productService.getProductById(PRODUCT_1.getId())).thenReturn(PRODUCT_1);
 
         mockMvc.perform(get("/api/products/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect((ResultMatcher) jsonPath("$[0]", equals(PRODUCT_1)));
+                .andExpect(jsonPath("$.id", is(PRODUCT_1.getId().intValue())))
+                .andExpect(jsonPath("$.name", is(PRODUCT_1.getName())));
     }
 
     @Test
     public void testGetProductById_WhenNotFound() throws Exception {
 
-        when(userService.getProductById(42L)).thenThrow(new ResourceNotFoundException("Product with id: '42' not found"));
+        when(productService.getProductById(42L)).thenThrow(new ResourceNotFoundException("Product with id: '42' not found"));
 
         mockMvc.perform(get("/api/products/42"))
                 .andExpect(status().isNotFound());
@@ -102,20 +102,21 @@ public class ProductControllerTest {
     public void testUpdateProduct_WhenEverythingIsOk() throws Exception {
         ProductDto productDto = modelMapper.map(PRODUCT_1_UPDATE, ProductDto.class);
 
-        when(userService.getProductById(PRODUCT_1.getId())).thenReturn(PRODUCT_1);
-        when(userService.updateProduct(productDto)).thenReturn(PRODUCT_1_UPDATE);
+        when(productService.getProductById(PRODUCT_1.getId())).thenReturn(PRODUCT_1);
+        when(productService.updateProduct(productDto)).thenReturn(PRODUCT_1_UPDATE);
 
-        mockMvc.perform(put("/api/users/1")
+        mockMvc.perform(put("/api/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect((ResultMatcher) jsonPath("$[0]", equals(PRODUCT_1_UPDATE)));
+                .andExpect(jsonPath("$.price", is(PRODUCT_1_UPDATE.getPrice().doubleValue())))
+                .andExpect(jsonPath("$.name", is(PRODUCT_1_UPDATE.getName())));
     }
 
     @Test
     public void testUpdateProductWithUnknownId_WhenNotFound() throws Exception {
-        when(userService.updateProduct(INVALID_PRODUCT_DTO_UPDATE)).thenThrow(new ResourceNotFoundException("Product with id: '42' not found"));
+        when(productService.updateProduct(INVALID_PRODUCT_DTO_UPDATE)).thenThrow(new ResourceNotFoundException("Product with id: '42' not found"));
 
         mockMvc.perform(put("/api/products/42")
                         .contentType(MediaType.APPLICATION_JSON)

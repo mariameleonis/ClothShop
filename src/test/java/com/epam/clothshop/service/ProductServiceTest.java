@@ -3,7 +3,6 @@ package com.epam.clothshop.service;
 import com.epam.clothshop.dao.ProductRepository;
 import com.epam.clothshop.dto.ProductDto;
 import com.epam.clothshop.model.Product;
-import com.epam.clothshop.model.User;
 import com.epam.clothshop.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -62,11 +61,11 @@ public class ProductServiceTest {
     @Test
     public void testCreateProduct() {
 
-        when(productMapper.map(VALID_PRODUCT_DTO, Product.class)).thenReturn(PRODUCT_1);
+        when(productMapper.map(VALID_PRODUCT_DTO_ADD_TO_VENDOR, Product.class)).thenReturn(PRODUCT_1);
 
         when(productRepository.save(argumentCaptor.capture())).thenReturn(PRODUCT_1);
 
-        Long resultProductId = productService.createProduct(VALID_PRODUCT_DTO);
+        Long resultProductId = productService.createProduct(VALID_PRODUCT_DTO_ADD_TO_VENDOR);
 
         assertThat(resultProductId, is(PRODUCT_1.getId()));
         assertThat(argumentCaptor.getValue().getName(), is(PRODUCT_1.getName()));

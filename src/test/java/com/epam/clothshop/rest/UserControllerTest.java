@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 public class UserControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -155,7 +154,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testDeleteVendor_WhenInvalidArgumentSupplied() throws Exception {
+    public void testDeleteUser_WhenInvalidArgumentSupplied() throws Exception {
 
         mockMvc.perform(delete("/api/users/abc")
                         .contentType(MediaType.APPLICATION_JSON))

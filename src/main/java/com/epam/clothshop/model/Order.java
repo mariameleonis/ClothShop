@@ -56,7 +56,7 @@ public class Order {
 
     @Tolerate
     public Order(Long id, User user, BigDecimal totalPrice, Set<OrderItem> orderItems) {
-        this.id = id;
+        this.orderId = id;
         this.user = user;
         this.totalPrice = totalPrice;
         this.orderItems = orderItems;

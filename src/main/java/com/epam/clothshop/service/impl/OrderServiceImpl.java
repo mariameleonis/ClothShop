@@ -12,4 +12,9 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrders() {
         return null;
     }
+
+    @Override
+    public Order getOrderById(Long id) {
+        return null;
+    }
 }

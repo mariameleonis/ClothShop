@@ -1,9 +1,7 @@
 package com.epam.clothshop.rest;
 
 import com.epam.clothshop.dto.UserDto;
-import com.epam.clothshop.dto.VendorDto;
 import com.epam.clothshop.model.User;
-import com.epam.clothshop.model.Vendor;
 import com.epam.clothshop.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

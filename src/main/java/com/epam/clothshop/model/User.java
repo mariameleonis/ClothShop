@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -37,6 +38,19 @@ public class User {
     @Column(length=16, nullable = false, unique = true)
     private String phone;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userId")
-    private Set<Order> orders;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Order> orders = new HashSet<>();
+
+    public void add(Order order) {
+
+        if(order != null) {
+            
+            if(orders == null) {
+                orders = new HashSet<>();
+            }
+
+            orders.add(order);
+            order.setUser(this);
+        }
+    }
 }

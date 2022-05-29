@@ -12,38 +12,16 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-public class OrderDto extends Dto {
+public class OrderDto {
 
-    @Null(groups = {New.class})
-    @NotNull(groups = {Update.class})
-    private Long categoryId;
-
-    @Null(groups = {New.class})
-    @NotNull(groups = {Update.class})
-    private LocalDate shipDate;
-
-    @Null(groups = {New.class, Update.class})
-    private LocalDate createdAt;
-
-    @Null(groups = {New.class})
-    @NotNull(groups = {Update.class})
-    private String status;
-
-    @Null(groups = {New.class})
-    @NotNull(groups = {Update.class})
-    private Boolean complete;
-
-    @Null(groups = {Update.class})
-    @NotNull(groups = {New.class})
+    @NotNull
     private Long userId;
 
-    @Null(groups = {New.class})
-    @NotNull(groups = {Update.class})
-    @DecimalMin(value = "0.0", inclusive = false, groups = {New.class, Update.class})
-    @Digits(integer=4, fraction=2, groups = {New.class, Update.class})
+    @NotNull
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer=4, fraction=2)
     private BigDecimal totalPrice;
 
-    @Null(groups = {New.class})
-    @NotNull(groups = {Update.class})
+    @NotNull
     private Set<OrderItem> orderItems;
 }

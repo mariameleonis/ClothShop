@@ -1,27 +1,34 @@
 package com.epam.clothshop.model;
 
 import lombok.Data;
+import lombok.experimental.Tolerate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Data
-@IdClass(OrderItemId.class)
 public class OrderItem {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Long productId;
 
-    @Id
-    private Long orderId;
+    @ManyToOne
+    @JoinColumn(name="order_id")
+    private Order order;
 
-    @Column(nullable = false)
     private int quantity;
 
-    @Column(name="selling_price", nullable = false)
+    @Column(name="selling_price")
     private BigDecimal sellingPrice;
+
+    @Tolerate
+    public OrderItem(Long productId, int quantity, BigDecimal sellingPrice) {
+        this.productId = productId;
+        this.quantity = quantity;
+        this.sellingPrice = sellingPrice;
+    }
 }

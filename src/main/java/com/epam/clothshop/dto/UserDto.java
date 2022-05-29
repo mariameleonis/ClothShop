@@ -8,17 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.*;
 
 @Data
-public class UserDto {
-
-    public interface New {
-    }
-
-    interface Exist {
-    }
-
-    public interface Update extends Exist {
-    }
-
+public class UserDto extends Dto{
     @Null(groups = {New.class})
     @NotNull(groups = {Update.class})
     private Long id;

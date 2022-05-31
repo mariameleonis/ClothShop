@@ -1,6 +1,5 @@
 package com.epam.clothshop.dto;
 
-import com.epam.clothshop.model.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,19 +7,19 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Set;
 
 @Data
-public class OrderDto {
+@AllArgsConstructor
+public class OrderItemDto {
 
     @NotNull
-    private Long userId;
+    private Long productId;
+
+    @NotNull
+    private int quantity;
 
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
     @Digits(integer=4, fraction=2)
-    private BigDecimal totalPrice;
-
-    @NotNull
-    private Set<OrderItem> orderItems;
+    private BigDecimal sellingPrice;
 }

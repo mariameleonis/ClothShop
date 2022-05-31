@@ -26,7 +26,8 @@ public class OrderItem {
     private BigDecimal sellingPrice;
 
     @Tolerate
-    public OrderItem(Long productId, int quantity, BigDecimal sellingPrice) {
+    public OrderItem(Long id, Long productId, int quantity, BigDecimal sellingPrice) {
+        this.id = id;
         this.productId = productId;
         this.quantity = quantity;
         this.sellingPrice = sellingPrice;

@@ -28,7 +28,7 @@ public class Order {
     private LocalDate createdAt;
 
     @Column(length = 30)
-    private String status = "PLACED";
+    private String status = OrderStatus.PLACED.name();
 
     private Boolean complete = false;
 

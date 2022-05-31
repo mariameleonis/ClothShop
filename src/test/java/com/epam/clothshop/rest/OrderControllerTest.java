@@ -1,14 +1,11 @@
 package com.epam.clothshop.rest;
 
-import com.epam.clothshop.dto.OrderDto;
+import com.epam.clothshop.dto.OrderItemDto;
 import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.OrderItem;
 import com.epam.clothshop.service.impl.OrderServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +17,7 @@ import java.util.Set;
 
 import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -38,12 +36,6 @@ public class OrderControllerTest {
 
     @MockBean
     private OrderServiceImpl orderService;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Captor
-    private ArgumentCaptor<OrderDto> argumentCaptor;
 
     @Test
     public void testGetAllOrders_WhenEverythingIsOk() throws Exception {
@@ -120,9 +112,11 @@ public class OrderControllerTest {
     @Test
     public void testCancelOrder_WhenNotFound() throws Exception {
 
-        doThrow(new ResourceNotFoundException("Order with id: '42' not found")).when(orderService).cancelOrderById(42L);
+        Long id = (long) Math.random();
 
-        mockMvc.perform(post("/api/orders/42/cancel")
+        doThrow(new ResourceNotFoundException()).when(orderService).cancelOrderById(anyLong());
+
+        mockMvc.perform(post("/api/orders/{id}/cancel", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -140,10 +134,12 @@ public class OrderControllerTest {
 
         Set<OrderItem> orderItems = ORDER_1.getOrderItems();
 
+        when(orderService.getOrderById(anyLong())).thenReturn(ORDER_1);
+
         mockMvc.perform(get("/api/orders/{id}/items", ORDER_1.getOrderId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(orderItems.size())))
-                .andExpect(jsonPath("$", hasItems(orderItems)));
+                .andExpect(jsonPath("$[0].productId", is(ORDER_ITEM_1.getProductId().intValue())));
     }
 
     @Test
@@ -183,7 +179,7 @@ public class OrderControllerTest {
 
         Long id = (long) Math.random();
 
-        doThrow(new ResourceNotFoundException()).when(orderService).addOrderItem(id);
+        doThrow(new ResourceNotFoundException()).when(orderService).addOrderItem(anyLong(), any(OrderItemDto.class));
 
         mockMvc.perform(post("/api/orders/{id}/items", id)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -192,7 +188,7 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void testAddOrderItem_WhenInvalidOrderItemSupplied() {
+    public void testAddOrderItem_WhenInvalidOrderItemSupplied() throws Exception {
 
         mockMvc.perform(post("/api/orders/{id}/items", ORDER_1.getOrderId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -207,7 +203,7 @@ public class OrderControllerTest {
 
         mockMvc.perform(get("/api/orders/{oid}/items/{iid}", ORDER_1.getOrderId(), ORDER_ITEM_1.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(ORDER_ITEM_1.getId())));
+                .andExpect(jsonPath("$.id", is(ORDER_ITEM_1.getId().intValue())));
 
     }
 
@@ -247,7 +243,7 @@ public class OrderControllerTest {
         Long orderId = (long) Math.random();
         Long orderItemId = (long) Math.random();
 
-        when(orderService.deleteOrderItem(anyLong(), anyLong())).thenThrow(new ResourceNotFoundException());
+        doThrow(new ResourceNotFoundException()).when(orderService).deleteOrderItem(anyLong(), anyLong());
 
         mockMvc.perform(delete("/api/orders/{oid}/items/{iid}", orderId, orderItemId))
                 .andExpect(status().isNotFound());

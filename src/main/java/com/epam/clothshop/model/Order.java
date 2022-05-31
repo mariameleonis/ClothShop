@@ -54,6 +54,19 @@ public class Order {
         }
     }
 
+    public boolean remove(Long orderItemId) {
+
+        if (orderItems != null) {
+
+            for (OrderItem oi : orderItems) {
+                if(oi.getId() == orderItemId)
+                    return orderItems.remove(oi);
+            }
+        }
+
+        return false;
+    }
+
     @Tolerate
     public Order(Long id, User user, BigDecimal totalPrice, Set<OrderItem> orderItems) {
         this.orderId = id;

@@ -42,7 +42,7 @@ public class ClothShopTestData {
     public static final OrderItem ORDER_ITEM_2 = new OrderItem(2L,2,BigDecimal.valueOf(110.70));
     public static final OrderItem ORDER_ITEM_3 = new OrderItem(3L,1,BigDecimal.valueOf(100.90));
     public static final Order ORDER_1 = new Order(1L, USER_1, BigDecimal.valueOf(120.50), Set.of(ORDER_ITEM_1));
-    public static final Order ORDER_2 = new Order(2L, USER_2, BigDecimal.valueOf(321.40), Set.of(ORDER_ITEM_1, ORDER_ITEM_3));
+    public static final Order ORDER_2 = new Order(2L, USER_2, BigDecimal.valueOf(110.70), Set.of(ORDER_ITEM_2));
     public static final Order ORDER_3 = new Order(3L, USER_3, BigDecimal.valueOf(100.90), Set.of(ORDER_ITEM_3));
     public static final List<Order> ORDER_LIST = new ArrayList<>(List.of(ORDER_1, ORDER_2, ORDER_3));
 }

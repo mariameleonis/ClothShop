@@ -6,9 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Set;
 
 @Data

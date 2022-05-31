@@ -1,8 +1,8 @@
 package com.epam.clothshop.rest;
 
 import com.epam.clothshop.dto.OrderDto;
-import com.epam.clothshop.dto.ProductDto;
 import com.epam.clothshop.exception.ResourceNotFoundException;
+import com.epam.clothshop.model.OrderItem;
 import com.epam.clothshop.service.impl.OrderServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -16,19 +16,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
+import java.util.Set;
 
 import static com.epam.clothshop.ClothShopTestData.*;
-import static com.epam.clothshop.ClothShopTestData.PRODUCT_3;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -109,6 +105,162 @@ public class OrderControllerTest {
 
         mockMvc.perform(delete("/api/orders/abc")
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testCancelOrder_WhenEverythingIsOk() throws Exception {
+
+        mockMvc.perform(post("/api/orders/1/cancel")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void testCancelOrder_WhenNotFound() throws Exception {
+
+        doThrow(new ResourceNotFoundException("Order with id: '42' not found")).when(orderService).cancelOrderById(42L);
+
+        mockMvc.perform(post("/api/orders/42/cancel")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testCancelOrder_WhenInvalidArgumentSupplied() throws Exception {
+
+        mockMvc.perform(post("/api/orders/abc/cancel")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testGetAllOrderItems_WhenEverythingIsOk() throws Exception {
+
+        Set<OrderItem> orderItems = ORDER_1.getOrderItems();
+
+        mockMvc.perform(get("/api/orders/{id}/items", ORDER_1.getOrderId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(orderItems.size())))
+                .andExpect(jsonPath("$", hasItems(orderItems)));
+    }
+
+    @Test
+    public void testGetAllOrderItems_WhenNotFound() throws Exception {
+
+        Long id = (long) Math.random();
+
+        doThrow(new ResourceNotFoundException()).when(orderService).getOrderById(id);
+
+        mockMvc.perform(get("/api/orders/{id}/items", id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetAllOrderItems_WhenInvalidArgumentSupplied() throws Exception {
+
+        String invalidArg = "abc";
+
+        mockMvc.perform(get("/api/orders/{id}/items", invalidArg)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testAddOrderItem_WhenEverythingIsOk() throws Exception {
+
+        mockMvc.perform(post("/api/orders/{id}/items", ORDER_1.getOrderId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(VALID_ORDER_ITEM_DTO)))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void testAddOrderItem_WhenNotFound() throws Exception {
+
+        Long id = (long) Math.random();
+
+        doThrow(new ResourceNotFoundException()).when(orderService).addOrderItem(id);
+
+        mockMvc.perform(post("/api/orders/{id}/items", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(VALID_ORDER_ITEM_DTO)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testAddOrderItem_WhenInvalidOrderItemSupplied() {
+
+        mockMvc.perform(post("/api/orders/{id}/items", ORDER_1.getOrderId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(INVALID_ORDER_ITEM_DTO)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testGetOrderItemById_WhenEverythingIsOk() throws Exception {
+
+        when(orderService.findOrderItemInOrderById(anyLong(), anyLong())).thenReturn(ORDER_ITEM_1);
+
+        mockMvc.perform(get("/api/orders/{oid}/items/{iid}", ORDER_1.getOrderId(), ORDER_ITEM_1.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(ORDER_ITEM_1.getId())));
+
+    }
+
+    @Test
+    public void testGetOrderItemById_WhenNotFound() throws Exception {
+
+        Long orderId = (long) Math.random();
+        Long orderItemId = (long) Math.random();
+
+        when(orderService.findOrderItemInOrderById(anyLong(), anyLong())).thenThrow(new ResourceNotFoundException());
+
+        mockMvc.perform(get("/api/orders/{oid}/items/{iid}", orderId, orderItemId))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    public void testGetOrderItemById_WhenInvalidArgumentSupplied() throws Exception {
+
+        String orderId = "xyz";
+        String orderItemId = "klm";
+
+        mockMvc.perform(get("/api/orders/{oid}/items/{iid}", orderId, orderItemId))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testDeleteOrderItem_WhenEverythingIsOk() throws Exception {
+
+        mockMvc.perform(delete("/api/orders/{oid}/items/{iid}", ORDER_1.getOrderId(), ORDER_ITEM_1.getId()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testDeleteOrderItem_WhenNotFound() throws Exception {
+
+        Long orderId = (long) Math.random();
+        Long orderItemId = (long) Math.random();
+
+        when(orderService.deleteOrderItem(anyLong(), anyLong())).thenThrow(new ResourceNotFoundException());
+
+        mockMvc.perform(delete("/api/orders/{oid}/items/{iid}", orderId, orderItemId))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    public void testDeleteOrderItem_WhenInvalidArgumentSupplied() throws Exception {
+
+        String orderId = "xyz";
+        String orderItemId = "klm";
+
+        mockMvc.perform(delete("/api/orders/{oid}/items/{iid}", orderId, orderItemId))
                 .andExpect(status().isBadRequest());
     }
 }

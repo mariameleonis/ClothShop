@@ -95,7 +95,7 @@ public class OrderServiceTest {
     @Test
     public void testDeleteOrderItem_WhenEverythingIsOk() {
 
-        Order order = new Order(15L, USER_1, BigDecimal.valueOf(530.50), new HashSet<>(Set.of(
+        Order order = new Order(15L, USER_1, new HashSet<>(Set.of(
                 ORDER_ITEM_1, ORDER_ITEM_2, ORDER_ITEM_3
         )));
 
@@ -121,7 +121,7 @@ public class OrderServiceTest {
     @Test
     public void testDeleteOrderItem_WhenOrderDoesNotContainOrderItem() {
 
-        Order order = new Order(15L, USER_1, BigDecimal.valueOf(530.50), Set.of(
+        Order order = new Order(15L, USER_1, Set.of(
                 ORDER_ITEM_1, ORDER_ITEM_2, ORDER_ITEM_3
         ));
 
@@ -166,7 +166,7 @@ public class OrderServiceTest {
     @Test
     public void testAddOrderItemToOrder_WhenEverythingIsOk() {
 
-        Order order = new Order(15L, USER_1, BigDecimal.valueOf(530.50), new HashSet<>());
+        Order order = new Order(15L, USER_1, new HashSet<>());
 
         when(orderItemMapper.map(VALID_ORDER_ITEM_DTO, OrderItem.class))
                 .thenReturn(modelMapper.map(VALID_ORDER_ITEM_DTO, OrderItem.class));

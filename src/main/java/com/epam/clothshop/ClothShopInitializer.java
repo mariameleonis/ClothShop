@@ -75,7 +75,6 @@ public class ClothShopInitializer implements CommandLineRunner {
             product.setCategoryId((long) faker.number().numberBetween(1, 10));
             product.setPrice(BigDecimal.valueOf(Double.parseDouble(faker.commerce().price().replaceAll(",","."))));
             product.setVendorId((long) faker.number().numberBetween(1, 10));
-            product.setUnitsInStock(faker.number().numberBetween(1, 150));
 
             productRepository.save(product);
         }
@@ -84,8 +83,6 @@ public class ClothShopInitializer implements CommandLineRunner {
 
             Order order = new Order();
 
-            BigDecimal totalPrice = BigDecimal.valueOf(0);
-
             OrderItem orderItem = new OrderItem();
 
             orderItem.setProductId((long) faker.number().numberBetween(1, 50));
@@ -93,9 +90,6 @@ public class ClothShopInitializer implements CommandLineRunner {
             orderItem.setQuantity(faker.number().numberBetween(1, 5));
 
             order.add(orderItem);
-            totalPrice = BigDecimal.valueOf(totalPrice.doubleValue() + (orderItem.getSellingPrice().doubleValue() * orderItem.getQuantity()));
-
-            order.setTotalPrice(totalPrice);
 
             User user = userRepository.getById((long) faker.number().numberBetween(1, 10));
             user.add(order);

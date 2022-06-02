@@ -1,5 +1,6 @@
 package com.epam.clothshop;
 
+import com.epam.clothshop.dto.OrderDto;
 import com.epam.clothshop.dto.OrderItemDto;
 import com.epam.clothshop.dto.ProductDto;
 import com.epam.clothshop.dto.UserDto;
@@ -8,6 +9,7 @@ import org.aspectj.weaver.ast.Or;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -46,7 +48,7 @@ public class ClothShopTestData {
     public static final Order ORDER_2 = new Order(2L, USER_2, Set.of(ORDER_ITEM_2));
     public static final Order ORDER_3 = new Order(3L, USER_3, Set.of(ORDER_ITEM_3));
     public static final List<Order> ORDER_LIST = new ArrayList<>(List.of(ORDER_1, ORDER_2, ORDER_3));
-
+    public static final OrderDto VALID_ORDER_DTO = new OrderDto(new HashSet<>(Set.of(ORDER_ITEM_1, ORDER_ITEM_2)));
     public static final OrderItemDto VALID_ORDER_ITEM_DTO = new OrderItemDto(1L, 2, BigDecimal.valueOf(120.50));
     public static final OrderItemDto INVALID_ORDER_ITEM_DTO = new OrderItemDto(null, 0, null);
 }

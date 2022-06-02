@@ -23,13 +23,17 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    private LocalDate shipDate = LocalDate.now().plusDays(3L);
+    @CreationTimestamp
+    private LocalDate shipDate;
 
     @CreationTimestamp
     private LocalDate createdAt;
 
     @Column(length = 30)
     private String status = OrderStatus.PLACED.name();
+
+    @Column(name="order_tracking_number")
+    private String orderTrackingNumber;
 
     private Boolean complete = false;
 

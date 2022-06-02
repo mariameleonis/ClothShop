@@ -151,7 +151,6 @@ public class CategoryControllerTest {
         product.setId(id);
         product.setName(name);
         product.setPrice(price);
-        product.setUnitsInStock(quantity);
         product.setCategoryId(categoryId);
         product.setVendorId(vendorId);
 

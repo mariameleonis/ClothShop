@@ -9,9 +9,12 @@ import com.epam.clothshop.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,8 +31,14 @@ public class OrderServiceTest {
     @Mock
     private OrderRepository orderRepository;
 
+    @Mock
+    private ModelMapper orderItemMapper;
+
     @InjectMocks
     OrderServiceImpl orderService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Test
     public void testGetAllOrders() {
@@ -86,9 +95,9 @@ public class OrderServiceTest {
     @Test
     public void testDeleteOrderItem_WhenEverythingIsOk() {
 
-        Order order = new Order(15L, USER_1, BigDecimal.valueOf(530.50), Set.of(
+        Order order = new Order(15L, USER_1, BigDecimal.valueOf(530.50), new HashSet<>(Set.of(
                 ORDER_ITEM_1, ORDER_ITEM_2, ORDER_ITEM_3
-        ));
+        )));
 
         int orderItemsSize = order.getOrderItems().size();
 
@@ -157,11 +166,16 @@ public class OrderServiceTest {
     @Test
     public void testAddOrderItemToOrder_WhenEverythingIsOk() {
 
-        when(orderRepository.findById(anyLong())).thenReturn(Optional.of(ORDER_3));
+        Order order = new Order(15L, USER_1, BigDecimal.valueOf(530.50), new HashSet<>());
 
-        orderService.addOrderItem(ORDER_3.getOrderId(), VALID_ORDER_ITEM_DTO);
+        when(orderItemMapper.map(VALID_ORDER_ITEM_DTO, OrderItem.class))
+                .thenReturn(modelMapper.map(VALID_ORDER_ITEM_DTO, OrderItem.class));
 
-        assertTrue(ORDER_3.getOrderItems().size() == 2);
+        when(orderRepository.findById(anyLong())).thenReturn(Optional.of(order));
+
+        orderService.addOrderItem(order.getOrderId(), VALID_ORDER_ITEM_DTO);
+
+        assertTrue(ORDER_3.getOrderItems().size() == 1);
     }
 
     @Test
@@ -189,9 +203,9 @@ public class OrderServiceTest {
 
         when(orderRepository.findById(anyLong())).thenReturn(Optional.of(ORDER_3));
 
-        orderService.cancelOrderById(ORDER_1.getOrderId());
+        orderService.cancelOrderById(ORDER_3.getOrderId());
 
-        assertTrue(ORDER_1.getStatus().equals(OrderStatus.CANCELLED.name()));
+        assertTrue(ORDER_3.getStatus().equals(OrderStatus.CANCELLED.name()));
     }
 
     @Test

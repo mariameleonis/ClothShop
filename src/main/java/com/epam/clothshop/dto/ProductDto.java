@@ -36,10 +36,6 @@ public class ProductDto extends Dto {
 
     @Null(groups = {UpdateImage.class})
     @NotNull(groups = {New.class, Update.class, AddToVendor.class})
-    private int unitsInStock;
-
-    @Null(groups = {UpdateImage.class})
-    @NotNull(groups = {New.class, Update.class, AddToVendor.class})
     private Long categoryId;
 
     @Null(groups = {UpdateImage.class, AddToVendor.class})
@@ -47,20 +43,18 @@ public class ProductDto extends Dto {
     private Long vendorId;
 
     @Tolerate
-    public ProductDto(String name, BigDecimal price, int unitsInStock, Long categoryId, Long vendorId) {
+    public ProductDto(String name, BigDecimal price, Long categoryId, Long vendorId) {
         this.name = name;
         this.price = price;
-        this.unitsInStock = unitsInStock;
         this.categoryId = categoryId;
         this.vendorId = vendorId;
     }
 
     @Tolerate
-    public ProductDto(Long id, String name, BigDecimal price, int unitsInStock, Long categoryId, Long vendorId) {
+    public ProductDto(Long id, String name, BigDecimal price, Long categoryId, Long vendorId) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.unitsInStock = unitsInStock;
         this.categoryId = categoryId;
         this.vendorId = vendorId;
     }

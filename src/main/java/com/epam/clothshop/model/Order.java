@@ -1,13 +1,14 @@
 package com.epam.clothshop.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Tolerate;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,9 +36,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
-
-    @Column(name="total_price", nullable = false)
-    private BigDecimal totalPrice;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private Set<OrderItem> orderItems = new HashSet<>();
@@ -67,11 +65,16 @@ public class Order {
         return false;
     }
 
+    public BigDecimal getTotalPrice() {
+        return orderItems.stream()
+                .map(OrderItem::getSellingPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
     @Tolerate
-    public Order(Long id, User user, BigDecimal totalPrice, Set<OrderItem> orderItems) {
+    public Order(Long id, User user, Set<OrderItem> orderItems) {
         this.orderId = id;
         this.user = user;
-        this.totalPrice = totalPrice;
         this.orderItems = orderItems;
     }
 }

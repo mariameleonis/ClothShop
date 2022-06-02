@@ -23,9 +23,6 @@ public class Product {
     @Column(nullable = true)
     private String imageFileName;
 
-    @Column(name="units_in_stock", nullable = false)
-    private int unitsInStock;
-
     @Column(name="category_id", nullable = false)
     private Long categoryId;
 
@@ -33,11 +30,10 @@ public class Product {
     private Long vendorId;
 
     @Tolerate
-    public Product(Long id, String name, BigDecimal price, int unitsInStock, Long categoryId, Long vendorId) {
+    public Product(Long id, String name, BigDecimal price, Long categoryId, Long vendorId) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.unitsInStock = unitsInStock;
         this.categoryId = categoryId;
         this.vendorId = vendorId;
     }

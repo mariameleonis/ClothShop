@@ -14,8 +14,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -127,7 +125,6 @@ public class ProductServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> {
             productService.addOrUpdatePhoto(PRODUCT_1.getId(), Files.readAllBytes(new File("src/test/java/com/epam/clothshop/service/img/photo.jpeg").toPath()));
         });
-
     }
 
     @Test
@@ -153,5 +150,4 @@ public class ProductServiceTest {
             productService.getPhoto(PRODUCT_2.getId());
         });
     }
-
 }

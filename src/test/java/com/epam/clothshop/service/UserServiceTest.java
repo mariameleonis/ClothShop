@@ -1,7 +1,9 @@
 package com.epam.clothshop.service;
 
 import com.epam.clothshop.dao.UserRepository;
+import com.epam.clothshop.dto.OrderDto;
 import com.epam.clothshop.dto.UserDto;
+import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.User;
 import com.epam.clothshop.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -13,13 +15,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -99,5 +103,25 @@ public class UserServiceTest {
         userService.deleteUserById(USER_3.getId());
 
         verify(userRepository, times(1)).deleteById(USER_3.getId());
+    }
+
+    @Test
+    public void testAddOrderToUser_WhenEverythingIsOk() {
+
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(USER_1));
+
+        userService.addOrderToUser(USER_1.getId(), VALID_ORDER_DTO);
+
+        assertTrue(USER_1.getOrders().size() == 1);
+    }
+
+    @Test
+    public void testAddOrderToUser_WhenUserNotFound() {
+
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(null));
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            userService.addOrderToUser(USER_1.getId(), VALID_ORDER_DTO);
+        });
     }
 }

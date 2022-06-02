@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -52,12 +53,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void addOrUpdatePhoto(Long id, byte[] photo) {
 
+        getProductById(id).setPhoto(photo);
     }
 
     @Override
     public byte[] getPhoto(Long id) {
-        return new byte[0];
+
+        Product product = getProductById(id);
+        return product.getPhoto();
     }
 }

@@ -5,7 +5,6 @@ import com.epam.clothshop.dto.OrderResponse;
 import com.epam.clothshop.dto.UserDto;
 import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.service.impl.UserServiceImpl;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

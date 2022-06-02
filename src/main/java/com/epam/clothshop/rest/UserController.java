@@ -1,5 +1,7 @@
 package com.epam.clothshop.rest;
 
+import com.epam.clothshop.dto.OrderDto;
+import com.epam.clothshop.dto.OrderResponse;
 import com.epam.clothshop.dto.UserDto;
 import com.epam.clothshop.model.User;
 import com.epam.clothshop.service.impl.UserServiceImpl;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -50,5 +53,10 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable("id") Long id) {
        userService.deleteUserById(id);
+    }
+    
+    @PostMapping("/{id}/orders")
+    public OrderResponse addOrderToUser(@PathVariable("id") Long userId, @Valid @RequestBody OrderDto orderDto) {
+        return userService.addOrderToUser(userId, orderDto);
     }
 }

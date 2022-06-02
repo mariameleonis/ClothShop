@@ -12,4 +12,6 @@ public interface ProductService {
     Long createProduct(ProductDto productDto);
     Product updateProduct(ProductDto productDto);
     void deleteProductById(Long id);
+    void addOrUpdatePhoto(Long id, byte[] photo);
+    byte[] getPhoto(Long id);
 }

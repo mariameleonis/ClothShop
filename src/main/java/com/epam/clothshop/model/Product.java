@@ -20,8 +20,9 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = true)
-    private String imageFileName;
+    @Lob
+    @Column(nullable = true, columnDefinition = "BLOB")
+    private byte[] photo;
 
     @Column(name="category_id", nullable = false)
     private Long categoryId;

@@ -10,9 +10,6 @@ import java.math.BigDecimal;
 @Data
 public class ProductDto extends Dto {
 
-    public interface UpdateImage extends Exists {
-    }
-
     public interface AddToVendor {
     }
 
@@ -21,24 +18,18 @@ public class ProductDto extends Dto {
     private Long id;
 
     @NotEmpty(groups = {New.class, Update.class, AddToVendor.class})
-    @Null(groups = {UpdateImage.class})
     @Size(min = 4, max = 100, groups = {New.class, Update.class, AddToVendor.class})
     private String name;
 
-    @Null(groups = {UpdateImage.class})
     @NotNull(groups = {New.class, Update.class, AddToVendor.class})
     @DecimalMin(value = "0.0", inclusive = false, groups = {New.class, Update.class, AddToVendor.class})
     @Digits(integer=4, fraction=2, groups = {New.class, Update.class, AddToVendor.class})
     private BigDecimal price;
 
-    @NotNull(groups = {UpdateImage.class})
-    private String imageFileName;
-
-    @Null(groups = {UpdateImage.class})
     @NotNull(groups = {New.class, Update.class, AddToVendor.class})
     private Long categoryId;
 
-    @Null(groups = {UpdateImage.class, AddToVendor.class})
+    @Null(groups = {AddToVendor.class})
     @NotNull(groups = {New.class, Update.class})
     private Long vendorId;
 

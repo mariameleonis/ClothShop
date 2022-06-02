@@ -50,4 +50,14 @@ public class ProductServiceImpl implements ProductService {
         getProductById(id);
         productRepository.deleteById(id);
     }
+
+    @Override
+    public void addOrUpdatePhoto(Long id, byte[] photo) {
+
+    }
+
+    @Override
+    public byte[] getPhoto(Long id) {
+        return new byte[0];
+    }
 }

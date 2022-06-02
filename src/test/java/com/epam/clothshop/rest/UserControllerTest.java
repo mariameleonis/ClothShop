@@ -1,8 +1,11 @@
 package com.epam.clothshop.rest;
 
+import com.epam.clothshop.dto.OrderDto;
+import com.epam.clothshop.dto.OrderResponse;
 import com.epam.clothshop.dto.UserDto;
 import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.service.impl.UserServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -15,10 +18,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -158,6 +165,44 @@ public class UserControllerTest {
 
         mockMvc.perform(delete("/api/users/abc")
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testAddOrderToUser_WhenEverythingIsOk() throws Exception {
+
+        String orderTrackingNumber = UUID.randomUUID().toString();
+        OrderResponse orderResponse = new OrderResponse(orderTrackingNumber);
+
+        when(userService.addOrderToUser(anyLong(), any(OrderDto.class))).thenReturn(orderResponse);
+
+        mockMvc.perform(post("/api/users/{id}/orders", USER_1.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(VALID_ORDER_DTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.orderTrackingNumber", is(orderTrackingNumber)));
+    }
+
+    @Test
+    public void testAddOrderToUser_WhenUserNotFound() throws Exception {
+
+        when(userService.addOrderToUser(anyLong(), any(OrderDto.class))).thenThrow(new ResourceNotFoundException());
+
+        mockMvc.perform(post("/api/users/{id}/orders", USER_1.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(VALID_ORDER_DTO)))
+                .andExpect(status().isNotFound());
+
+
+    }
+
+    @Test
+    public void testAddOrderToUser_WhenInvalidOrderSupplied() throws Exception {
+
+        mockMvc.perform(post("/api/users/{id}/orders", USER_1.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(INVALID_ORDER_DTO)))
                 .andExpect(status().isBadRequest());
     }
 }

@@ -49,6 +49,7 @@ public class ClothShopTestData {
     public static final Order ORDER_3 = new Order(3L, USER_3, Set.of(ORDER_ITEM_3));
     public static final List<Order> ORDER_LIST = new ArrayList<>(List.of(ORDER_1, ORDER_2, ORDER_3));
     public static final OrderDto VALID_ORDER_DTO = new OrderDto(new HashSet<>(Set.of(ORDER_ITEM_1, ORDER_ITEM_2)));
+    public static final OrderDto INVALID_ORDER_DTO = new OrderDto(null);
     public static final OrderItemDto VALID_ORDER_ITEM_DTO = new OrderItemDto(1L, 2, BigDecimal.valueOf(120.50));
     public static final OrderItemDto INVALID_ORDER_ITEM_DTO = new OrderItemDto(null, 0, null);
 }

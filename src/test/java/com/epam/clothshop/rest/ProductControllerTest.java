@@ -13,12 +13,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.io.File;
+import java.nio.file.Files;
 
 import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -155,6 +161,71 @@ public class ProductControllerTest {
 
         mockMvc.perform(delete("/api/products/abc")
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testAddOrUpdatePhoto_WhenEverythingIsOk() throws Exception {
+
+        Long id = PRODUCT_1.getId();
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "photo.jpeg",
+                MediaType.IMAGE_JPEG_VALUE,
+                Files.readAllBytes(new File("src/test/java/com/epam/clothshop/service/img/photo.jpeg").toPath())
+        );
+
+        mockMvc.perform(multipart("/api/products/{id}/photo", id).file(file))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testAddOrUpdatePhoto_WhenProductNotFound() throws Exception {
+
+        Long id = PRODUCT_1.getId();
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "photo.jpeg",
+                MediaType.IMAGE_JPEG_VALUE,
+                Files.readAllBytes(new File("src/test/java/com/epam/clothshop/service/img/photo.jpeg").toPath())
+        );
+
+        doThrow(new ResourceNotFoundException()).when(productService).addOrUpdatePhoto(anyLong(), any(byte[].class));
+
+        mockMvc.perform(multipart("/api/products/{id}/photo", id).file(file))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetPhoto_WhenEverythingIsOk() throws Exception {
+
+        Long id = PRODUCT_1.getId();
+
+        byte[] photo = Files.readAllBytes(new File("src/test/java/com/epam/clothshop/service/img/photo.jpeg").toPath());
+
+        when(productService.getPhoto(anyLong())).thenReturn(photo);
+
+        mockMvc.perform(get("/api/products/{id}/photo", id))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetPhoto_WhenProductNotFound() throws Exception {
+
+        Long id = PRODUCT_1.getId();
+
+        when(productService.getPhoto(anyLong())).thenThrow(new ResourceNotFoundException());
+
+        mockMvc.perform(get("/api/products/{id}/photo", id))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetPhoto_WhenInvalidArgumentSupplied() throws Exception {
+
+        mockMvc.perform(get("/api/products/{id}/photo", "abc"))
                 .andExpect(status().isBadRequest());
     }
 }

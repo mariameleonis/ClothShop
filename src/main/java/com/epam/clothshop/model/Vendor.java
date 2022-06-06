@@ -17,7 +17,7 @@ public class Vendor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vendorId;
 
-    @Column(length = 25, nullable = false)
+    @Column(length = 50, nullable = false)
     private String vendorName;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "vendorId")

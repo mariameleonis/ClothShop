@@ -57,4 +57,10 @@ public class UserDto extends Dto{
         this.password = password;
         this.phone = phone;
     }
+
+    @Tolerate
+    public UserDto(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

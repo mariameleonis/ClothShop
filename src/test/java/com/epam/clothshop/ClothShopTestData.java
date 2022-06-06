@@ -30,12 +30,12 @@ public class ClothShopTestData {
     public static final ProductDto VALID_PRODUCT_DTO = new ProductDto("Little Black Dress", BigDecimal.valueOf(120.50), 1L, 1L);
     public static final ProductDto INVALID_PRODUCT_DTO = new ProductDto("", BigDecimal.valueOf(120.50), 1L, 1L);
     public static final ProductDto INVALID_PRODUCT_DTO_UPDATE = new ProductDto(42L, "Little Black Dress", BigDecimal.valueOf(120.50), 1L, 1L);
-    public static final User USER_1 = new User(1L, "mariya888", "Mariya", "Russakova", "russakova.m@gmail.com", "12345", "77056081966", null);
+    public static final User USER_1 = new User(1L, "mariya888", "Mariya", "Russakova", "russakova.m@gmail.com", "12345", "77056081966");
 
-    public static final User USER_1_UPDATE = new User(1L, "mariya888", "Mariya", "Ivanova", "ivanova.m@gmail.com", "12345", "77056081966", null);
-    public static final User USER_2 = new User(2L, "anna777", "Anna", "Russakova", "russakova.a@gmail.com", "12345", "77056081967", null);
+    public static final User USER_1_UPDATE = new User(1L, "mariya888", "Mariya", "Ivanova", "ivanova.m@gmail.com", "12345", "77056081966");
+    public static final User USER_2 = new User(2L, "anna777", "Anna", "Russakova", "russakova.a@gmail.com", "12345", "77056081967");
 
-    public static final User USER_3 = new User(3L, "svetlana999", "Svetlana", "Petrova", "petrova.s@gmail.com", "12345", "77056056789", null);
+    public static final User USER_3 = new User(3L, "svetlana999", "Svetlana", "Petrova", "petrova.s@gmail.com", "12345", "77056056789");
 
     public static final List<User> USERS_LIST = new ArrayList<>(List.of(USER_1, USER_2, USER_3));
     public static final UserDto VALID_USER_DTO = new UserDto("svetlana999", "Svetlana", "Petrova", "petrova.s@gmail.com", "12345", "77056056789");

@@ -6,12 +6,15 @@ import com.epam.clothshop.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -50,5 +53,16 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void deleteProductById(@PathVariable("id") Long id) {
         productService.deleteProductById(id);
+    }
+
+    @PostMapping("/{id}/photo")
+    public void addOrUpdatePhoto(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) throws IOException {
+        productService.addOrUpdatePhoto(id, file.getBytes());
+    }
+
+    @GetMapping(value = "/{id}/photo",  produces = MediaType.IMAGE_JPEG_VALUE)
+    public  @ResponseBody byte[] getPhoto(@PathVariable("id") Long id) {
+
+        return productService.getPhoto(id);
     }
 }

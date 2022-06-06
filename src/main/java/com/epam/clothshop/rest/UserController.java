@@ -99,7 +99,7 @@ public class UserController {
                     .collect(joining(" "));
 
             JwtClaimsSet claims = JwtClaimsSet.builder()
-                    .issuer("example.io")
+                    .issuer("clothshop.epam.com")
                     .issuedAt(now)
                     .expiresAt(now.plusSeconds(expiry))
                     .subject(format("%s,%s", user.getId(), user.getUsername()))

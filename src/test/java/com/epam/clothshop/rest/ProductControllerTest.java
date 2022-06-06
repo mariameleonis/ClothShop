@@ -208,6 +208,7 @@ public class ProductControllerTest {
         when(productService.getPhoto(anyLong())).thenReturn(photo);
 
         mockMvc.perform(get("/api/products/{id}/photo", id))
+                .andExpect(content().contentType("image/jpeg"))
                 .andExpect(status().isOk());
     }
 

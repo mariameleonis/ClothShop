@@ -5,6 +5,7 @@ import com.epam.clothshop.dto.OrderResponse;
 import com.epam.clothshop.dto.UserDto;
 import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.service.impl.UserServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -14,9 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static com.epam.clothshop.ClothShopTestData.*;
@@ -44,6 +49,9 @@ public class UserControllerTest {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Captor
     private ArgumentCaptor<UserDto> argumentCaptor;
@@ -203,5 +211,28 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INVALID_ORDER_DTO)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testLoginUser_WhenEverythingIsOk() throws Exception {
+
+        UserDto userDto = new UserDto(USER_1.getUsername(), USER_1.getPassword());
+
+        when(userService.loadUserByUsername(userDto.getUsername()))
+                .thenReturn(new org.springframework.security.core.userdetails.User(USER_1.getUsername(), passwordEncoder.encode(USER_1.getPassword()), new ArrayList<>()));
+
+        when(userService.getUserByUsername(userDto.getUsername())).thenReturn(USER_1);
+
+        mockMvc.perform(post("/api/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(USER_1.getId().intValue())))
+                .andExpect(header().exists(HttpHeaders.AUTHORIZATION));
+    }
+
+    @Test
+    public void testLoginUser_WhenInvalidCredentialsSupplied() {
+
     }
 }

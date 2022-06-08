@@ -1,7 +1,6 @@
 package com.epam.clothshop.service;
 
 import com.epam.clothshop.dao.UserRepository;
-import com.epam.clothshop.dto.OrderDto;
 import com.epam.clothshop.dto.UserDto;
 import com.epam.clothshop.exception.ResourceNotFoundException;
 import com.epam.clothshop.model.User;
@@ -15,10 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static com.epam.clothshop.ClothShopTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;

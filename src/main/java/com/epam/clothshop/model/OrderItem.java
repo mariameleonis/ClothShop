@@ -1,5 +1,6 @@
 package com.epam.clothshop.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.experimental.Tolerate;
 
@@ -18,6 +19,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name="order_id")
+    @JsonBackReference
     private Order order;
 
     private int quantity;

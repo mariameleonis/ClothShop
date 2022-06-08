@@ -1,5 +1,7 @@
 package com.epam.clothshop.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,9 +41,11 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name="user_id")
+    @JsonBackReference
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+    @JsonManagedReference
     private Set<OrderItem> orderItems = new HashSet<>();
 
     public void add(OrderItem orderItem) {

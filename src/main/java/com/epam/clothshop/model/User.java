@@ -1,5 +1,6 @@
 package com.epam.clothshop.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +35,7 @@ public class User implements UserDetails {
     @Column(length=50, nullable = false, unique = true)
     private String email;
 
-    @Column(length=32, nullable = false)
+    @Column(length=60, nullable = false)
     private String password;
 
     @Column(length=16, nullable = false, unique = true)
@@ -43,6 +44,7 @@ public class User implements UserDetails {
     private boolean enabled = true;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonManagedReference
     private Set<Order> orders = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

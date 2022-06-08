@@ -94,6 +94,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
+    }
+
     private String generateOrderTrackingNumber() {
 
         return UUID.randomUUID().toString();

@@ -87,9 +87,9 @@ public class UserController {
             Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword(), new ArrayList<>()));
 
-            String username = authentication.getName();
+            String email = authentication.getName();
 
-            User user = userService.getUserByUsername(username);
+            User user = userService.getUserByEmail(email);
 
             Instant now = Instant.now();
             long expiry = 36000L;
@@ -112,6 +112,7 @@ public class UserController {
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .body(user);
         } catch (BadCredentialsException ex) {
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }

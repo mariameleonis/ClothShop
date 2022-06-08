@@ -16,4 +16,5 @@ public interface UserService extends UserDetailsService {
     void deleteUserById(Long id);
     OrderResponse addOrderToUser(Long userId, OrderDto orderDto);
     User getUserByUsername(String username);
+    User getUserByEmail(String email);
 }

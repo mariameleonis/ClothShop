@@ -6,6 +6,7 @@ import com.github.javafaker.Faker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -33,6 +35,9 @@ public class ClothShopInitializer implements CommandLineRunner {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -61,7 +66,7 @@ public class ClothShopInitializer implements CommandLineRunner {
             user.setLastName(faker.name().lastName());
             user.setUsername(faker.name().username());
             user.setEmail(faker.internet().emailAddress());
-            user.setPassword(faker.internet().password());
+            user.setPassword(passwordEncoder.encode("1234"));
             user.setPhone(String.valueOf(faker.phoneNumber().cellPhone()));
 
             userRepository.save(user);
@@ -82,6 +87,7 @@ public class ClothShopInitializer implements CommandLineRunner {
         for (int i = 0; i < 10; i++) {
 
             Order order = new Order();
+            order.setOrderTrackingNumber(UUID.randomUUID().toString());
 
             OrderItem orderItem = new OrderItem();
 

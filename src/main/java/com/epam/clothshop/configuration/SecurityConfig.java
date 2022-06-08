@@ -9,6 +9,7 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -17,6 +18,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -58,10 +60,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${springdoc.swagger-ui.path}")
     private String swaggerPath;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/h2-console/**");
     }
 
     @Override
@@ -89,9 +101,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(format("%s/**", swaggerPath)).permitAll()
                 // Our public endpoints
                 .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
-                .antMatchers("/api/public/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/vendors/search").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/vendors/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
                 // Our private endpoints
                 .anyRequest().authenticated()
@@ -128,10 +140,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     // Set password encoding schema
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  //  @Bean
+  //  public PasswordEncoder passwordEncoder() {
+   //     return new BCryptPasswordEncoder();
+  //  }
 
     // Used by spring security if CORS is enabled.
     @Bean
